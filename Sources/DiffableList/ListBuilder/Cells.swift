@@ -9,6 +9,7 @@ import UIKit
 
 public protocol CellConfigurationConvertible {
     func configure(using configuration: inout UIListContentConfiguration)
+    func asCellConfiguration() -> [CellConfigurationConvertible]
 }
 
 public protocol CellConvertible {
@@ -111,6 +112,10 @@ public struct Text: Hashable, CellConfigurationConvertible {
         self.text = text
     }
     
+    public func asCellConfiguration() -> [CellConfigurationConvertible] {
+        [self]
+    }
+    
     public init(attributedString: NSAttributedString) {
         self.text = ""
         self.attributedText = attributedString
@@ -155,6 +160,10 @@ public struct SecondaryText: CellConfigurationConvertible {
         self.color = color
         self.font = font
     }
+    
+    public func asCellConfiguration() -> [CellConfigurationConvertible] {
+        [self]
+    }
         
     public func configure(using configuration: inout UIListContentConfiguration) {
         configuration.secondaryText = text
@@ -179,6 +188,10 @@ public struct Image: CellConfigurationConvertible {
     
     public init(systemName: String) {
         self.image = .init(systemName: systemName)!
+    }
+    
+    public func asCellConfiguration() -> [CellConfigurationConvertible] {
+        [self]
     }
     
     public func configure(using configuration: inout UIListContentConfiguration) {
@@ -213,6 +226,11 @@ extension Array: CellConvertible where Element == CellConvertible {
         get { UIListContentConfiguration.cell() }
         set { }
     }
+}
+
+extension Array: CellConfigurationConvertible where Element == CellConfigurationConvertible {
+    public func configure(using configuration: inout UIListContentConfiguration) {}
+    public func asCellConfiguration() -> [CellConfigurationConvertible] { self }
 }
 
 public extension UIListContentConfiguration {

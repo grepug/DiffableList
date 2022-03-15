@@ -9,11 +9,7 @@ import UIKit
 
 public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     lazy var diffableDataSource = makeDataSource()
-    public var content: List = List {} {
-        didSet {
-            applySnapshot()
-        }
-    }
+    var content: List = List {}
     
     private unowned var sectionProviderWrapper: SectionProviderWrapper
     
@@ -43,8 +39,15 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     }
 }
 
+public extension DiffableListView {
+    func setContent(_ list: List, animating: Bool = true) {
+        content = list
+        applySnapshot(animating: animating)
+    }
+}
+
 extension DiffableListView {
-    func applySnapshot() {
+    func applySnapshot(animating: Bool) {
         for section in content.sections {
             var snapshot = diffableDataSource.snapshot(for: section.id)
             snapshot.deleteAll()
@@ -63,7 +66,7 @@ extension DiffableListView {
                 }
             }
             
-            diffableDataSource.apply(snapshot, to: section.id)
+            diffableDataSource.apply(snapshot, to: section.id, animatingDifferences: animating)
         }
     }
     

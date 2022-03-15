@@ -24,7 +24,11 @@ public extension ListBuilder {
     }
     
     static func buildBlock(_ components: CellConfigurationConvertible...) -> [CellConfigurationConvertible] {
-        components
+        components.flatMap { $0.asCellConfiguration() }
+    }
+
+    static func buildBlock(_ components: [CellConfigurationConvertible]) -> [CellConfigurationConvertible] {
+        components.flatMap { $0.asCellConfiguration() }
     }
     
     static func buildArray(_ components: [[CellConvertible]]) -> [CellConvertible] {
@@ -49,5 +53,21 @@ public extension ListBuilder {
     
     static func buildEither(second component: [CellConvertible]) -> [CellConvertible] {
         component.flatMap { $0.asCell() }
+    }
+    
+    static func buildOptional(_ component: [CellConfigurationConvertible]?) -> [CellConfigurationConvertible] {
+        (component ?? []).flatMap { $0.asCellConfiguration() }
+    }
+    
+    static func buildEither(first component: [CellConfigurationConvertible]) -> [CellConfigurationConvertible] {
+        component.flatMap { $0.asCellConfiguration() }
+    }
+    
+    static func buildEither(second component: [CellConfigurationConvertible]) -> [CellConfigurationConvertible] {
+        component.flatMap { $0.asCellConfiguration() }
+    }
+    
+    static func buildArray(_ components: [CellConfigurationConvertible]) -> [CellConfigurationConvertible] {
+        components.flatMap { $0.asCellConfiguration() }
     }
 }
