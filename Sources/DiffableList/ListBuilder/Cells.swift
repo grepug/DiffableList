@@ -32,6 +32,7 @@ public struct Cell: CellConvertible {
     
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory] = []
+    var storedDidSelectedAction: (() -> Void)?
     
     public func asCell() -> [CellConvertible] {
         [self]
@@ -53,9 +54,13 @@ public struct Cell: CellConvertible {
         self.configuration = configuration
     }
     
-    public func contextMenu() -> Self {
+    public func contextMenu(_ menu: [UIMenuElement]) -> Self {
         var cell = self
-        cell.storedContextMenu = nil
+        cell.storedContextMenu = .init(identifier: id as NSCopying,
+                                       previewProvider: nil,
+                                       actionProvider: { _ in
+                .init(children: menu)
+        })
         
         return cell
     }
@@ -65,6 +70,13 @@ public struct Cell: CellConvertible {
         cell.storedAccessories = items
         
         return cell
+    }
+    
+    public func onTap(action: @escaping () -> Void) -> Self {
+        var me = self
+        me.storedDidSelectedAction = action
+        
+        return me
     }
 }
 
@@ -159,6 +171,7 @@ public struct SecondaryText: CellConfigurationConvertible {
 
 public struct Image: CellConfigurationConvertible {
     var image: UIImage
+    var uiColor: UIColor?
     
     public init(_ image: UIImage) {
         self.image = image
@@ -169,7 +182,20 @@ public struct Image: CellConfigurationConvertible {
     }
     
     public func configure(using configuration: inout UIListContentConfiguration) {
+        var image = image
+        
+        if let uiColor = uiColor {
+            image = image.withTintColor(uiColor, renderingMode: .alwaysOriginal)
+        }
+        
         configuration.image = image
+    }
+    
+    public func color(_ uiColor: UIColor) -> Self {
+        var me = self
+        me.uiColor = uiColor
+        
+        return me
     }
 }
 

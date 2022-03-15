@@ -38,4 +38,16 @@ public extension ListBuilder {
     static func buildBlock(_ components: List) -> List {
         components
     }
+    
+    static func buildOptional(_ component: [CellConvertible]?) -> [CellConvertible] {
+        (component ?? []).flatMap { $0.asCell() }
+    }
+    
+    static func buildEither(first component: [CellConvertible]) -> [CellConvertible] {
+        component.flatMap { $0.asCell() }
+    }
+    
+    static func buildEither(second component: [CellConvertible]) -> [CellConvertible] {
+        component.flatMap { $0.asCell() }
+    }
 }

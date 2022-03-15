@@ -87,10 +87,28 @@ extension DiffableListView {
             
             if let theCell = cellConvertible as? Cell {
                 cell.accessories = theCell.storedAccessories
-            } else if let theCell = cellConvertible as? HeaderCell {
+            } else if let _ = cellConvertible as? HeaderCell {
                 cell.accessories = [.outlineDisclosure()]
             }
         }
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cellConvertible = content.sections[indexPath.section].cells[indexPath.item]
+        
+        if let cell = cellConvertible as? Cell {
+            cell.storedDidSelectedAction?()
+        }
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let cellConvertible = content.sections[indexPath.section].cells[indexPath.item]
+        
+        if let cell = cellConvertible as? Cell {
+            return cell.storedContextMenu
+        }
+
+        return nil
     }
 }
 
