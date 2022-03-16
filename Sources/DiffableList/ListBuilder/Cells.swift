@@ -115,6 +115,7 @@ public struct Text: Hashable, CellConfigurationConvertible {
     var attributedText: NSAttributedString?
     var _color: UIColor?
     var _font: UIFont?
+    var isSecondary: Bool = false
     
     public init(_ text: String) {
         self.text = text
@@ -140,48 +141,45 @@ public struct Text: Hashable, CellConfigurationConvertible {
         _self._color = color
         return _self
     }
+    
+    public func secondary() -> Self {
+        var me = self
+        me.isSecondary = true
+        return me
+    }
         
     public func configure(using configuration: inout UIListContentConfiguration) {
-        if let attributedText = attributedText {
-            configuration.attributedText = attributedText
+        if isSecondary {
+            if let attributedText = attributedText {
+                configuration.secondaryAttributedText = attributedText
+            } else {
+                let prevText = configuration.secondaryText ?? ""
+                let wrapString = prevText.isEmpty ? "" : "\n"
+                
+                configuration.secondaryText = prevText + wrapString + text
+            }
+            
+            if let color = _color {
+                configuration.secondaryTextProperties.color = color
+            }
+            
+            if let font = _font {
+                configuration.secondaryTextProperties.font = font
+            }
         } else {
-            configuration.text = text
-        }
-        
-        if let color = _color {
-            configuration.textProperties.color = color
-        }
-        
-        if let font = _font {
-            configuration.textProperties.font = font
-        }
-    }
-}
-
-public struct SecondaryText: CellConfigurationConvertible {
-    var text: String
-    var color: UIColor?
-    var font: UIFont?
-    
-    public init(_ text: String, color: UIColor? = nil, font: UIFont? = nil) {
-        self.text = text
-        self.color = color
-        self.font = font
-    }
-    
-    public func asCellConfiguration() -> [CellConfigurationConvertible] {
-        [self]
-    }
-        
-    public func configure(using configuration: inout UIListContentConfiguration) {
-        configuration.secondaryText = text
-        
-        if let color = color {
-            configuration.secondaryTextProperties.color = color
-        }
-        
-        if let font = font {
-            configuration.secondaryTextProperties.font = font
+            if let attributedText = attributedText {
+                configuration.attributedText = attributedText
+            } else {
+                configuration.text = text
+            }
+            
+            if let color = _color {
+                configuration.textProperties.color = color
+            }
+            
+            if let font = _font {
+                configuration.textProperties.font = font
+            }
         }
     }
 }
