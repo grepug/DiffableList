@@ -8,7 +8,7 @@
 import UIKit
 
 public class DiffableListView: UICollectionView, UICollectionViewDelegate {
-    lazy var diffableDataSource = makeDataSource()
+    public lazy var diffableDataSource = makeDataSource()
     var content: List = List {}
     
     private unowned var sectionProviderWrapper: SectionProviderWrapper
