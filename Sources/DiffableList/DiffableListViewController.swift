@@ -21,7 +21,9 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
         self.sectionProviderWrapper = sectionProviderWrapper
         
         super.init(frame: frame, collectionViewLayout: layout)
+        
         delegate = self
+        
         setupLayout()
     }
     
