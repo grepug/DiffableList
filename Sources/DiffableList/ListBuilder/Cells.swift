@@ -74,6 +74,13 @@ public struct Cell: CellConvertible {
         return me
     }
     
+    public func swipeTrailingActions(_ actions: [UIContextualAction]) -> Self {
+        var me = self
+        me.storedTrailingSwipeActions = actions
+        
+        return me
+    }
+    
     public func accessories(_ items: [UICellAccessory]) -> Self {
         var cell = self
         cell.storedAccessories = items
