@@ -43,6 +43,10 @@ public extension ListBuilder {
         components
     }
     
+    static func buildOptional(_ component: [SectionConvertible]?) -> [Section] {
+        (component ?? []).flatMap { $0.asSection() }
+    }
+    
     static func buildOptional(_ component: [CellConvertible]?) -> [CellConvertible] {
         (component ?? []).flatMap { $0.asCell() }
     }

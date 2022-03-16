@@ -34,6 +34,7 @@ public struct Cell: CellConvertible {
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory] = []
     var storedDidSelectedAction: (() -> Void)?
+    var storedTrailingSwipeActions: [UIContextualAction]?
     
     public func asCell() -> [CellConvertible] {
         [self]
@@ -64,6 +65,13 @@ public struct Cell: CellConvertible {
         })
         
         return cell
+    }
+    
+    public func swipeTrailingActions(_ actions: [UIContextualAction?]?) -> Self {
+        var me = self
+        me.storedTrailingSwipeActions = actions?.compactMap { $0 }
+        
+        return me
     }
     
     public func accessories(_ items: [UICellAccessory]) -> Self {

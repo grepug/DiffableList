@@ -12,6 +12,7 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     var content: List = List {}
     
     private unowned var sectionProviderWrapper: SectionProviderWrapper
+    private var appliedSnapshotSectionIds = Set<SectionIdentifier>()
     
     public init(frame: CGRect) {
         let sectionProviderWrapper = SectionProviderWrapper()
@@ -32,9 +33,18 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     }
     
     func setupLayout() {
-        sectionProviderWrapper.sectionProvider = { sectionIndex, env in
+        sectionProviderWrapper.sectionProvider = { [unowned self] sectionIndex, env in
             var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             listConfig.headerMode = .firstItemInSection
+            listConfig.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
+                let cellConvertible = self.cellConvertible(at: indexPath)
+                
+                if let cell = cellConvertible as? Cell {
+                    return .init(actions: cell.storedTrailingSwipeActions ?? [])
+                }
+                    
+                return nil
+            }
             
             return .list(using: listConfig, layoutEnvironment: env)
         }
@@ -50,9 +60,13 @@ public extension DiffableListView {
 
 extension DiffableListView {
     func applySnapshot(animating: Bool) {
+        var appliedSectionIds = Set<SectionIdentifier>()
+        let prevAppliedSectionIds = appliedSnapshotSectionIds
+        
         for section in content.sections {
             var snapshot = diffableDataSource.snapshot(for: section.id)
             snapshot.deleteAll()
+            
             var headerId: ItemIdentifier?
             
             for cell in section.cells {
@@ -68,7 +82,19 @@ extension DiffableListView {
                 }
             }
             
+            appliedSectionIds.insert(section.id)
+            appliedSnapshotSectionIds.insert(section.id)
             diffableDataSource.apply(snapshot, to: section.id, animatingDifferences: animating)
+        }
+        
+        let notAppliedSectionIds = prevAppliedSectionIds.subtracting(appliedSectionIds)
+        
+        for sectionId in notAppliedSectionIds {
+            var snapshot = diffableDataSource.snapshot(for: sectionId)
+            snapshot.deleteAll()
+            
+            appliedSnapshotSectionIds.insert(sectionId)
+            diffableDataSource.apply(snapshot, to: sectionId, animatingDifferences: animating)
         }
     }
     
@@ -98,8 +124,12 @@ extension DiffableListView {
         }
     }
     
+    func cellConvertible(at indexPath: IndexPath) -> CellConvertible {
+        content.sections[indexPath.section].cells[indexPath.item]
+    }
+    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cellConvertible = content.sections[indexPath.section].cells[indexPath.item]
+        let cellConvertible = cellConvertible(at: indexPath)
         
         if let cell = cellConvertible as? Cell {
             cell.storedDidSelectedAction?()
@@ -107,7 +137,7 @@ extension DiffableListView {
     }
     
     public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let cellConvertible = content.sections[indexPath.section].cells[indexPath.item]
+        let cellConvertible = cellConvertible(at: indexPath)
         
         if let cell = cellConvertible as? Cell {
             return cell.storedContextMenu
