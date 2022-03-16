@@ -56,6 +56,10 @@ public extension DiffableListView {
         content = list
         applySnapshot(animating: animating)
     }
+    
+    func indexPath<T: Hashable>(forItemIdentifier id: T) -> IndexPath? {
+        diffableDataSource.indexPath(for: id.hashValue.description)
+    }
 }
 
 extension DiffableListView {
