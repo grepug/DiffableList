@@ -35,6 +35,7 @@ public struct Cell: CellConvertible {
     var storedAccessories: [UICellAccessory] = []
     var storedDidSelectedAction: ((IndexPath) -> Void)?
     var storedTrailingSwipeActions: [UIContextualAction]?
+    var storedDidEndDisplay: ((UICollectionViewCell, IndexPath) -> Void)?
     
     public func asCell() -> [CellConvertible] {
         [self]
@@ -91,6 +92,13 @@ public struct Cell: CellConvertible {
     public func onTap(action: @escaping (IndexPath) -> Void) -> Self {
         var me = self
         me.storedDidSelectedAction = action
+        
+        return me
+    }
+    
+    public func onDisapear(perform action: @escaping (UICollectionViewCell, IndexPath) -> Void) -> Self {
+        var me = self
+        me.storedDidEndDisplay = action
         
         return me
     }
