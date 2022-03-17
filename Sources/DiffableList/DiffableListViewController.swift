@@ -34,6 +34,10 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     
     func setupLayout() {
         sectionProviderWrapper.sectionProvider = { [unowned self] sectionIndex, env in
+            guard !self.content.sections[sectionIndex].cells.isEmpty else {
+                return .empty
+            }
+            
             var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             listConfig.headerMode = .firstItemInSection
             listConfig.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
@@ -152,7 +156,7 @@ extension DiffableListView {
     
 //    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 //        let cellConvertible = cellConvertible(at: indexPath)
-//        
+//
 //        if let theCell = cellConvertible as? Cell {
 //            theCell.storedDidEndDisplay?(cell, indexPath)
 //        }
@@ -162,5 +166,11 @@ extension DiffableListView {
 class SectionProviderWrapper {
     var sectionProvider: UICollectionViewCompositionalLayoutSectionProvider = { _, _ in
         nil
+    }
+}
+
+extension NSCollectionLayoutSection {
+    static var empty: NSCollectionLayoutSection {
+        NSCollectionLayoutSection(group: .horizontal(layoutSize: .init(widthDimension: .absolute(0), heightDimension: .absolute(0)), subitem: .init(layoutSize: .init(widthDimension: .absolute(0), heightDimension: .absolute(0))), count: 1))
     }
 }
