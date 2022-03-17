@@ -136,7 +136,7 @@ extension DiffableListView {
         let cellConvertible = cellConvertible(at: indexPath)
         
         if let cell = cellConvertible as? Cell {
-            cell.storedDidSelectedAction?()
+            cell.storedDidSelectedAction?(indexPath)
         }
     }
     

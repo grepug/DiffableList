@@ -33,7 +33,7 @@ public struct Cell: CellConvertible {
     
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory] = []
-    var storedDidSelectedAction: (() -> Void)?
+    var storedDidSelectedAction: ((IndexPath) -> Void)?
     var storedTrailingSwipeActions: [UIContextualAction]?
     
     public func asCell() -> [CellConvertible] {
@@ -88,7 +88,7 @@ public struct Cell: CellConvertible {
         return cell
     }
     
-    public func onTap(action: @escaping () -> Void) -> Self {
+    public func onTap(action: @escaping (IndexPath) -> Void) -> Self {
         var me = self
         me.storedDidSelectedAction = action
         
