@@ -150,13 +150,13 @@ extension DiffableListView {
         return nil
     }
     
-    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let cellConvertible = cellConvertible(at: indexPath)
-        
-        if let theCell = cellConvertible as? Cell {
-            theCell.storedDidEndDisplay?(cell, indexPath)
-        }
-    }
+//    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        let cellConvertible = cellConvertible(at: indexPath)
+//        
+//        if let theCell = cellConvertible as? Cell {
+//            theCell.storedDidEndDisplay?(cell, indexPath)
+//        }
+//    }
 }
 
 class SectionProviderWrapper {
