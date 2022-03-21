@@ -21,7 +21,9 @@ extension Array: SectionConvertible where Element == DLSection {
 public struct DLSection: SectionConvertible, Identifiable {
     public var id = UUID().uuidString
     public var cells: [CellConvertible]
-    var _supplementaryTypes: SupplementaryTypes = .init()
+    var isFirstCellAsHeader: Bool = false
+    var headerText: String?
+    var footerText: String?
     
     public init(@ListBuilder cells: @escaping () -> [CellConvertible]) {
         self.cells = cells()
@@ -37,9 +39,21 @@ public struct DLSection: SectionConvertible, Identifiable {
         return me
     }
     
-    public func supplementaryTypes(_ types: SupplementaryTypes) -> Self {
+    public func firstCellAsHeader(_ isTrue: Bool = true) -> Self {
         var me = self
-        me._supplementaryTypes = types
+        me.isFirstCellAsHeader = isTrue
+        return me
+    }
+    
+    public func header(_ text: String) -> Self {
+        var me = self
+        me.headerText = text
+        return me
+    }
+    
+    public func footer(_ text: String) -> Self {
+        var me = self
+        me.footerText = text
         return me
     }
 }

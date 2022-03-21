@@ -30,5 +30,14 @@ public extension DLContentConfiguration {
         
         return .init(contentConfiguration: config)
     }
+    
+    static func segmentControl(items: [String], selectedIndex: Int, paddings: UIEdgeInsets? = nil, action: @escaping (Int) -> Void) -> Self {
+        let config = SegmentControlCellConfiguration(items: items,
+                                                     selectedIndex: selectedIndex,
+                                                     edgeInsets: paddings ?? .init(top: 16, left: 0, bottom: 16, right: 0),
+                                                     action: action)
+        
+        return .init(contentConfiguration: config)
+    }
 }
 

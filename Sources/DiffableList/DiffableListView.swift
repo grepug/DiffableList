@@ -43,11 +43,13 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
             
             var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             
-            if section._supplementaryTypes.contains(.header) {
+            if section.headerText != nil {
+                listConfig.headerMode = .supplementary
+            } else if section.isFirstCellAsHeader {
                 listConfig.headerMode = .firstItemInSection
             }
             
-            if section._supplementaryTypes.contains(.footer) {
+            if section.footerText != nil {
                 listConfig.footerMode = .supplementary
             }
             
@@ -119,17 +121,31 @@ extension DiffableListView {
     }
     
     func setupSupplementaryViewProvider() {
-        let footerConfig = makeFooterSupplementaryViewConfig()
+        let headerLabelConfig = makeHeaderLabelSupplementaryViewConfig()
+        let footerLabelConfig = makeFooterLabelSupplementaryViewConfig()
         
-        diffableDataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
-            collectionView.dequeueConfiguredReusableSupplementary(using: footerConfig,
-                                                                  for: indexPath)
+        diffableDataSource.supplementaryViewProvider = { [unowned self] collectionView, elementKind, indexPath in
+            let section = self.section(at: indexPath)
+                
+            switch elementKind {
+            case UICollectionView.elementKindSectionHeader:
+                if section.headerText != nil {
+                    return collectionView.dequeueConfiguredReusableSupplementary(using: headerLabelConfig, for: indexPath)
+                }
+            case UICollectionView.elementKindSectionFooter:
+                if section.footerText != nil {
+                    return collectionView.dequeueConfiguredReusableSupplementary(using: footerLabelConfig, for: indexPath)
+                }
+            default: break
+            }
+            
+            return nil
         }
     }
     
     func makeCellConfig() -> UICollectionView.CellRegistration<UICollectionViewListCell, ItemIdentifier> {
         .init { [unowned self] cell, indexPath, itemIdentifier in
-            let cellConvertible = self.content.sections[indexPath.section].cells[indexPath.item]
+            let cellConvertible = self.cellConvertible(at: indexPath)
             
             guard cellConvertible.id == itemIdentifier else {
                 fatalError()
@@ -143,14 +159,28 @@ extension DiffableListView {
         }
     }
     
-    func makeFooterSupplementaryViewConfig() -> UICollectionView.SupplementaryRegistration<UICollectionReusableView> {
-        .init(elementKind: UICollectionView.elementKindSectionFooter) { supplementaryView, elementKind, indexPath in
+    func makeHeaderLabelSupplementaryViewConfig() -> UICollectionView.SupplementaryRegistration<LabelResuableView> {
+        .init(elementKind: UICollectionView.elementKindSectionHeader) { [unowned self] supplementaryView, elementKind, indexPath in
+            let section = self.section(at: indexPath)
             
+            supplementaryView.config(text: section.headerText!)
+        }
+    }
+    
+    func makeFooterLabelSupplementaryViewConfig() -> UICollectionView.SupplementaryRegistration<LabelResuableView> {
+        .init(elementKind: UICollectionView.elementKindSectionFooter) { [unowned self] supplementaryView, elementKind, indexPath in
+            let section = self.section(at: indexPath)
+            
+            supplementaryView.config(text: section.footerText!)
         }
     }
     
     func cellConvertible(at indexPath: IndexPath) -> CellConvertible {
         content.sections[indexPath.section].cells[indexPath.item]
+    }
+    
+    func section(at indexPath: IndexPath) -> DLSection {
+        content.sections[indexPath.section]
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
