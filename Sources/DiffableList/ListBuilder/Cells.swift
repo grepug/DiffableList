@@ -126,7 +126,7 @@ public struct DLCell: CellConvertible {
     }
 }
 
-public struct Text: Hashable, CellConfigurationConvertible {
+public struct DLText: Hashable, CellConfigurationConvertible {
     var text: String
     var attributedText: NSAttributedString?
     var _color: UIColor?
@@ -200,7 +200,7 @@ public struct Text: Hashable, CellConfigurationConvertible {
     }
 }
 
-public struct Image: CellConfigurationConvertible {
+public struct DLImage: CellConfigurationConvertible {
     var image: UIImage
     var uiColor: UIColor?
     
