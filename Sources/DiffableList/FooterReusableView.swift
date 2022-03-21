@@ -16,6 +16,7 @@ class LabelResuableView: UICollectionReusableView {
         label.font = .preferredFont(forTextStyle: .footnote)
         label.textColor = .secondaryLabel
         label.lineBreakMode = .byCharWrapping
+        label.numberOfLines = 0
         
         addSubview(label)
         
