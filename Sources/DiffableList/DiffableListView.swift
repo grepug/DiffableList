@@ -26,6 +26,7 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
         delegate = self
         
         setupLayout()
+        setupSupplementaryViewProvider()
     }
     
     required init?(coder: NSCoder) {
@@ -117,6 +118,15 @@ extension DiffableListView {
         }
     }
     
+    func setupSupplementaryViewProvider() {
+        let footerConfig = makeFooterSupplementaryViewConfig()
+        
+        diffableDataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
+            collectionView.dequeueConfiguredReusableSupplementary(using: footerConfig,
+                                                                  for: indexPath)
+        }
+    }
+    
     func makeCellConfig() -> UICollectionView.CellRegistration<UICollectionViewListCell, ItemIdentifier> {
         .init { [unowned self] cell, indexPath, itemIdentifier in
             let cellConvertible = self.content.sections[indexPath.section].cells[indexPath.item]
@@ -130,6 +140,12 @@ extension DiffableListView {
             if let theCell = cellConvertible as? DLCell {
                 cell.accessories = theCell.storedAccessories
             }
+        }
+    }
+    
+    func makeFooterSupplementaryViewConfig() -> UICollectionView.SupplementaryRegistration<UICollectionReusableView> {
+        .init(elementKind: UICollectionView.elementKindSectionFooter) { supplementaryView, elementKind, indexPath in
+            
         }
     }
     
