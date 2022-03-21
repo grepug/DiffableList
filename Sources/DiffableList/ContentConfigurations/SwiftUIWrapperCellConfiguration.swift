@@ -8,21 +8,21 @@
 import UIKit
 import SwiftUI
 
-struct SwiftUIWrapperCellConfiguration<Content: View>: UIContentConfiguration {
+public struct SwiftUIWrapperCellConfiguration<Content: View>: UIContentConfiguration {
     var content: Content
     var parentVC: () -> UIViewController
     
-    init(toParentVC parentVC: @autoclosure @escaping () -> UIViewController,
+    public init(toParentVC parentVC: @autoclosure @escaping () -> UIViewController,
          @ViewBuilder content: @escaping () -> Content) {
         self.parentVC = parentVC
         self.content = content()
     }
     
-    func makeContentView() -> UIView & UIContentView {
+    public func makeContentView() -> UIView & UIContentView {
         SwiftUIWrapperCellConfigurationView(configuration: self)
     }
     
-    func updated(for state: UIConfigurationState) -> SwiftUIWrapperCellConfiguration {
+    public func updated(for state: UIConfigurationState) -> SwiftUIWrapperCellConfiguration {
         self
     }
 }
