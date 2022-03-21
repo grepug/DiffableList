@@ -11,8 +11,7 @@ import UIKit
 public typealias SectionIdentifier = String
 public typealias ItemIdentifier = String
 
-public typealias DLList = List
-public typealias DLText = Text
-public typealias DLCell = Cell
-public typealias DLHeaderCell = HeaderCell
-public typealias DLSection = Section
+//public typealias DLList = List
+//public typealias DLText = Text
+//public typealias DLCell = Cell
+//public typealias DLSection = Section

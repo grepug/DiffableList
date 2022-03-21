@@ -9,13 +9,13 @@ import Foundation
 
 @resultBuilder
 public struct ListBuilder {
-    static func buildBlock() -> [Section] {
+    static func buildBlock() -> [DLSection] {
         []
     }
 }
 
 public extension ListBuilder {
-    static func buildBlock(_ components: SectionConvertible...) -> [Section] {
+    static func buildBlock(_ components: SectionConvertible...) -> [DLSection] {
         components.flatMap { $0.asSection() }
     }
     
@@ -35,15 +35,15 @@ public extension ListBuilder {
         components.flatMap { $0.flatMap { $0.asCell() } }
     }
     
-    static func buildArray(_ components: [[SectionConvertible]]) -> [Section] {
+    static func buildArray(_ components: [[SectionConvertible]]) -> [DLSection] {
         components.flatMap { $0.flatMap { $0.asSection() } }
     }
     
-    static func buildBlock(_ components: List) -> List {
+    static func buildBlock(_ components: DLList) -> DLList {
         components
     }
     
-    static func buildOptional(_ component: [SectionConvertible]?) -> [Section] {
+    static func buildOptional(_ component: [SectionConvertible]?) -> [DLSection] {
         (component ?? []).flatMap { $0.asSection() }
     }
     

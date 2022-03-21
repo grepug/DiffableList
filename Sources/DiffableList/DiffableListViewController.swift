@@ -23,7 +23,7 @@ open class DiffableListViewController: UIViewController {
             listView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        listView.contentInset.top = 16
+//        listView.contentInset.top = 16
         
         return listView
     }

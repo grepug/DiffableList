@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct List {
-    public var sections: [Section]
+public struct DLList {
+    public var sections: [DLSection]
     
     var storedOnTapAction: ((IndexPath) -> Void)?
     
-    public init(@ListBuilder sections: @escaping () -> [Section]) {
+    public init(@ListBuilder sections: @escaping () -> [DLSection]) {
         self.sections = sections()
     }
     

@@ -6,26 +6,28 @@
 //
 
 import Foundation
+import UIKit
 
 public protocol SectionConvertible {
-    func asSection() -> [Section]
+    func asSection() -> [DLSection]
 }
 
-extension Array: SectionConvertible where Element == Section {
-    public func asSection() -> [Section] {
+extension Array: SectionConvertible where Element == DLSection {
+    public func asSection() -> [DLSection] {
         self
     }
 }
 
-public struct Section: SectionConvertible, Identifiable {
+public struct DLSection: SectionConvertible, Identifiable {
     public var id = UUID().uuidString
     public var cells: [CellConvertible]
+    var _supplementaryTypes: SupplementaryTypes = .init()
     
     public init(@ListBuilder cells: @escaping () -> [CellConvertible]) {
         self.cells = cells()
     }
     
-    public func asSection() -> [Section] {
+    public func asSection() -> [DLSection] {
         [self]
     }
     
@@ -34,4 +36,26 @@ public struct Section: SectionConvertible, Identifiable {
         me.id = id.hashValue.description
         return me
     }
+    
+    public func supplementaryTypes(_ types: SupplementaryTypes) -> Self {
+        var me = self
+        me._supplementaryTypes = types
+        return me
+    }
 }
+
+public extension DLSection {
+    struct SupplementaryTypes: OptionSet {
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+        
+        public let rawValue: Int
+        
+        public static let header = SupplementaryTypes(rawValue: 1 << 0)
+        public static let footer = SupplementaryTypes(rawValue: 1 << 1)
+
+        public static let all: SupplementaryTypes = [.header, .footer]
+    }
+}
+

@@ -14,6 +14,7 @@ public protocol CellConfigurationConvertible {
 
 public protocol CellConvertible {
     var id: ItemIdentifier { set get }
+    var parentId: ItemIdentifier? { get set }
     var configuration: UIContentConfiguration { get }
     
     func asCell() -> [CellConvertible]
@@ -25,10 +26,17 @@ public extension CellConvertible {
         me.id = id.hashValue.description
         return me
     }
+    
+    func child<ID: Hashable>(of id: ID) -> Self {
+        var me = self
+        me.parentId = id.hashValue.description
+        return me
+    }
 }
 
-public struct Cell: CellConvertible {
+public struct DLCell: CellConvertible {
     public var id = UUID().uuidString
+    public var parentId: ItemIdentifier?
     public var configuration: UIContentConfiguration
     
     var storedContextMenu: UIContextMenuConfiguration?
@@ -53,8 +61,8 @@ public struct Cell: CellConvertible {
         self.configuration = cellConfig
     }
     
-    public init(using configuration: UIContentConfiguration) {
-        self.configuration = configuration
+    public init(using dlConfiguration: DLContentConfiguration) {
+        self.configuration = dlConfiguration.contentConfiguration
     }
     
     public func contextMenu(_ menu: [UIMenuElement]) -> Self {
@@ -101,27 +109,6 @@ public struct Cell: CellConvertible {
         me.storedDidEndDisplay = action
         
         return me
-    }
-}
-
-public struct HeaderCell: CellConvertible {
-    public var id = UUID().uuidString
-    public var configuration: UIContentConfiguration
-    
-    public func asCell() -> [CellConvertible] {
-        [self]
-    }
-    
-    public init(using configuation: UIListContentConfiguration = .compactibleProminentInsetGroupedHeader(),
-         @ListBuilder properties: @escaping () -> [CellConfigurationConvertible]) {
-        var config = configuation
-        let properties = properties()
-        
-        for prop in properties {
-            prop.configure(using: &config)
-        }
-        
-        self.configuration = config
     }
 }
 
@@ -239,6 +226,11 @@ extension Array: CellConvertible where Element == CellConvertible {
     }
     
     public var id: String {
+        get { UUID().uuidString }
+        set {}
+    }
+    
+    public var parentId: String? {
         get { UUID().uuidString }
         set {}
     }
