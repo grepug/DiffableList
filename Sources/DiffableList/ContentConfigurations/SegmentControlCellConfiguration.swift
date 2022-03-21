@@ -79,7 +79,8 @@ extension SegmentControlCellConfiguration.View {
         
         segmentControl.selectedSegmentIndex = config.selectedIndex
         
-        let identifier = UIAction.Identifier("")
+        let identifier = UIAction.Identifier("segmentControl")
+        
         segmentControl.addAction(.init(identifier: identifier) { action in
             let segmentControl = action.sender as! UISegmentedControl
             config.action(segmentControl.selectedSegmentIndex)
