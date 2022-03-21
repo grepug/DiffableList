@@ -155,6 +155,10 @@ extension DiffableListView {
             
             if let theCell = cellConvertible as? DLCell {
                 cell.accessories = theCell.storedAccessories
+                
+                if let backgroundConfiguration = theCell.backgroundConfiguration {
+                    cell.backgroundConfiguration = backgroundConfiguration
+                }
             }
         }
     }

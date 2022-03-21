@@ -39,6 +39,7 @@ public struct DLCell: CellConvertible {
     public var parentId: ItemIdentifier?
     public var configuration: UIContentConfiguration
     
+    var backgroundConfiguration: UIBackgroundConfiguration?
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory] = []
     var storedDidSelectedAction: ((IndexPath) -> Void)?
@@ -61,8 +62,10 @@ public struct DLCell: CellConvertible {
         self.configuration = cellConfig
     }
     
-    public init(using dlConfiguration: DLContentConfiguration) {
+    public init(using dlConfiguration: DLContentConfiguration,
+                backgroundConfiguration: UIBackgroundConfiguration? = nil) {
         self.configuration = dlConfiguration.contentConfiguration
+        self.backgroundConfiguration = backgroundConfiguration
     }
     
     public func contextMenu(_ menu: [UIMenuElement]) -> Self {
