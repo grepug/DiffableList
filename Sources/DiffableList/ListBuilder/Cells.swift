@@ -45,6 +45,7 @@ public struct DLCell: CellConvertible {
     var storedDidSelectedAction: ((IndexPath) -> Void)?
     var storedTrailingSwipeActions: [UIContextualAction]?
     var storedDidEndDisplay: ((UICollectionViewCell, IndexPath) -> Void)?
+    var storedDisablingHighlight: Bool?
     
     public func asCell() -> [CellConvertible] {
         [self]
@@ -111,6 +112,12 @@ public struct DLCell: CellConvertible {
         var me = self
         me.storedDidEndDisplay = action
         
+        return me
+    }
+    
+    public func disableHighlight(_ disabled: Bool = true) -> Self {
+        var me = self
+        me.storedDisablingHighlight = disabled
         return me
     }
 }
