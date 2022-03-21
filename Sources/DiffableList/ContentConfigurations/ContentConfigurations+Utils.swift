@@ -13,7 +13,7 @@ public struct DLContentConfiguration {
 }
 
 public extension DLContentConfiguration {
-    static func swiftUI<Content: View>(toParentVC parent: UIViewController, @ViewBuilder content: @escaping () -> Content ) -> Self {
+    static func swiftUI<Content: View>(movingTo parent: UIViewController, @ViewBuilder content: @escaping () -> Content ) -> Self {
         .init(contentConfiguration: SwiftUIWrapperCellConfiguration(toParentVC: parent, content: content))
     }
     
