@@ -77,6 +77,15 @@ public extension DiffableListView {
     func indexPath<T: Hashable>(forItemIdentifier id: T) -> IndexPath? {
         diffableDataSource.indexPath(for: id.hashValue.description)
     }
+    
+    func forceReloadData() {
+        let snapshot = diffableDataSource.snapshot()
+        
+        if #available(iOS 15.0, *) {
+            diffableDataSource.applySnapshotUsingReloadData(snapshot)
+        } else {
+        }
+    }
 }
 
 extension DiffableListView {
@@ -151,15 +160,19 @@ extension DiffableListView {
                 fatalError()
             }
             
-            cell.contentConfiguration = cellConvertible.configuration
+            if let backgroundConfiguration = content.storedDefaultBackgroundConfiguration {
+                cell.backgroundConfiguration = backgroundConfiguration
+            }
             
             if let theCell = cellConvertible as? DLCell {
                 cell.accessories = theCell.storedAccessories
                 
-                if let backgroundConfiguration = theCell.backgroundConfiguration {
+                if let backgroundConfiguration = theCell.storedBackgroundConfiguration {
                     cell.backgroundConfiguration = backgroundConfiguration
                 }
             }
+            
+            cell.contentConfiguration = cellConvertible.configuration
         }
     }
     

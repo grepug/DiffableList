@@ -39,7 +39,7 @@ public struct DLCell: CellConvertible {
     public var parentId: ItemIdentifier?
     public var configuration: UIContentConfiguration
     
-    var backgroundConfiguration: UIBackgroundConfiguration?
+    var storedBackgroundConfiguration: UIBackgroundConfiguration?
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory] = []
     var storedDidSelectedAction: ((IndexPath) -> Void)?
@@ -63,10 +63,8 @@ public struct DLCell: CellConvertible {
         self.configuration = cellConfig
     }
     
-    public init(using dlConfiguration: DLContentConfiguration,
-                backgroundConfiguration: UIBackgroundConfiguration? = nil) {
+    public init(using dlConfiguration: DLContentConfiguration) {
         self.configuration = dlConfiguration.contentConfiguration
-        self.backgroundConfiguration = backgroundConfiguration
     }
     
     public func contextMenu(_ menu: [UIMenuElement]) -> Self {
@@ -118,6 +116,12 @@ public struct DLCell: CellConvertible {
     public func disableHighlight(_ disabled: Bool = true) -> Self {
         var me = self
         me.storedDisablingHighlight = disabled
+        return me
+    }
+    
+    public func backgroundConfiguration(_ configuration: UIBackgroundConfiguration) -> Self {
+        var me = self
+        me.storedBackgroundConfiguration = configuration
         return me
     }
 }
