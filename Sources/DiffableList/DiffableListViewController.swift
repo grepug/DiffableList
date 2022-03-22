@@ -7,6 +7,7 @@
 
 import UIKit
 
+@available(iOS 14.5, *)
 open class DiffableListViewController: UIViewController {
     lazy public var listView = makeListView()
     
