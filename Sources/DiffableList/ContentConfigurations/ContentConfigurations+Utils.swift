@@ -39,5 +39,16 @@ public extension DLContentConfiguration {
         
         return .init(contentConfiguration: config)
     }
+    
+    static func textField(text: String, font: UIFont? = nil, color: UIColor? = nil, paddings: UIEdgeInsets? = nil, height: CGFloat = 44, valueDidChange: ((String) -> Void)? = nil, editingDidEnd: ((String) -> Void)? = nil) -> Self {
+        let config = TextFieldCellConfiguration(text: text,
+                                                font: font,
+                                                color: color,
+                                                paddings: paddings ?? .init(top: 8, left: 16, bottom: 8, right: 16),
+                                                height: height,
+                                                valueDidChange: valueDidChange,
+                                                editingDidEnd: editingDidEnd)
+        return .init(contentConfiguration: config)
+    }
 }
 
