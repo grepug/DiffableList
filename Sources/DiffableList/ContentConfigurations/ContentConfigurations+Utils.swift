@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 
 public struct DLContentConfiguration {
+    public let id = UUID()
     let contentConfiguration: UIContentConfiguration
 }
 
