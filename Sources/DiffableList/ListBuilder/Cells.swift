@@ -46,6 +46,7 @@ public struct DLCell: CellConvertible {
     var storedTrailingSwipeActions: [UIContextualAction]?
     var storedDidEndDisplay: ((UICollectionViewCell, IndexPath) -> Void)?
     var storedDisablingHighlight: Bool?
+    var storedIndentLevel: Int?
     
     public func asCell() -> [CellConvertible] {
         [self]
@@ -122,6 +123,12 @@ public struct DLCell: CellConvertible {
     public func backgroundConfiguration(_ configuration: UIBackgroundConfiguration) -> Self {
         var me = self
         me.storedBackgroundConfiguration = configuration
+        return me
+    }
+    
+    public func indentLevel(_ level: Int) -> Self {
+        var me = self
+        me.storedIndentLevel = level
         return me
     }
 }
@@ -235,6 +242,11 @@ public struct DLImage: CellConfigurationConvertible {
 }
 
 extension Array: CellConvertible where Element == CellConvertible {
+    public var isCollapsed: Bool {
+        get { false }
+        set {}
+    }
+    
     public func asCell() -> [CellConvertible] {
         self
     }

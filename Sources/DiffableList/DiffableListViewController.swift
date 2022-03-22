@@ -10,6 +10,7 @@ import UIKit
 @available(iOS 14.5, *)
 open class DiffableListViewController: UIViewController {
     lazy public var listView = makeListView()
+    var collapsedItemIdentifiers: Set<ItemIdentifier> = []
     
     func makeListView() -> DiffableListView {
         let listView = DiffableListView(frame: view.bounds)
@@ -24,8 +25,61 @@ open class DiffableListViewController: UIViewController {
             listView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-//        listView.contentInset.top = 16
-        
         return listView
+    }
+    
+    open var list: DLList {
+        DLList {}
+    }
+    
+    open func reload(animating: Bool = true) {
+        listView.setContent(list, animating: animating)
+    }
+    
+    public func cellExpanded(_ identifier: ItemIdentifier) -> Bool {
+        !collapsedItemIdentifiers.contains(identifier)
+    }
+    
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        dataSource.sectionSnapshotHandlers.willExpandItem = { [unowned self] identifier in
+            self.insertOrRemoveCollapsedIdentifiers(parent: identifier)
+        }
+        
+        dataSource.sectionSnapshotHandlers.willCollapseItem = { [unowned self] identifier in
+            self.insertOrRemoveCollapsedIdentifiers(parent: identifier, expanding: false)
+        }
+    }
+}
+
+@available(iOS 14.5, *)
+private extension DiffableListViewController {
+    var dataSource: UICollectionViewDiffableDataSource<SectionIdentifier, ItemIdentifier> {
+        listView.diffableDataSource
+    }
+    
+    func itemIdentifiers(ofParent identifier: ItemIdentifier) -> [ItemIdentifier] {
+        guard let parentIndexPath = dataSource.indexPath(for: identifier) else { return [] }
+        
+        let sectionIdentifier = list.sections[parentIndexPath.section].id
+        let sectionSnapshot = dataSource.snapshot(for: sectionIdentifier)
+        let snapshot = sectionSnapshot.snapshot(of: identifier)
+        
+        return snapshot.items
+    }
+    
+    func insertOrRemoveCollapsedIdentifiers(parent identifier: ItemIdentifier, expanding: Bool = true) {
+        let itemIdentifiers = itemIdentifiers(ofParent: identifier)
+        
+        itemIdentifiers.forEach { id in
+            if expanding {
+                collapsedItemIdentifiers.remove(id)
+            } else {
+                collapsedItemIdentifiers.insert(id)
+            }
+        }
+        
+        listView.content = list
     }
 }

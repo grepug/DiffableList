@@ -177,6 +177,10 @@ extension DiffableListView {
                 if let backgroundConfiguration = theCell.storedBackgroundConfiguration {
                     cell.backgroundConfiguration = backgroundConfiguration
                 }
+                
+                if let level = theCell.storedIndentLevel {
+                    cell.indentationLevel = level
+                }
             }
             
             cell.contentConfiguration = cellConvertible.configuration
