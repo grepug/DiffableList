@@ -43,6 +43,14 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
             
             var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             
+            if #available(iOS 14.5, *) {
+                listConfig.itemSeparatorHandler = { indexPath, config in
+                    var config = config
+                    config.bottomSeparatorVisibility = .hidden
+                    return config
+                }
+            }
+            
             if section.headerText != nil {
                 listConfig.headerMode = .supplementary
             } else if section.isFirstCellAsHeader {
