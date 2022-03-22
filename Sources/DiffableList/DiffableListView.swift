@@ -75,9 +75,12 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
 
 @available(iOS 14.5, *)
 public extension DiffableListView {
-    func setContent(_ list: DLList, animating: Bool = true) {
+    func setContent(_ list: DLList, applyingSnapshot: Bool = true, animating: Bool = true) {
         content = list
-        applySnapshot(animating: animating)
+        
+        if applyingSnapshot {
+            applySnapshot(animating: animating)
+        }
     }
     
     func indexPath<T: Hashable>(forItemIdentifier id: T) -> IndexPath? {

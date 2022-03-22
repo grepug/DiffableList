@@ -32,8 +32,8 @@ open class DiffableListViewController: UIViewController {
         DLList {}
     }
     
-    open func reload(animating: Bool = true) {
-        listView.setContent(list, animating: animating)
+    open func reload(applyingSnapshot: Bool = true, animating: Bool = true) {
+        listView.setContent(list, applyingSnapshot: applyingSnapshot, animating: animating)
     }
     
     public func cellExpanded(_ identifier: ItemIdentifier) -> Bool {
@@ -80,6 +80,6 @@ private extension DiffableListViewController {
             }
         }
         
-        listView.content = list
+        reload(applyingSnapshot: false)
     }
 }
