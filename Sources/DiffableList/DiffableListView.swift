@@ -63,7 +63,9 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
                 return nil
             }
             
-            return .list(using: listConfig, layoutEnvironment: env)
+            let layoutSection = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: env)
+            
+            return layoutSection
         }
     }
 }
