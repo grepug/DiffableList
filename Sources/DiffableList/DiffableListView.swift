@@ -81,6 +81,8 @@ public extension DiffableListView {
         if applyingSnapshot {
             applySnapshot(animating: animating)
         }
+        
+        setupReorderHandler()
     }
     
     func indexPath<T: Hashable>(forItemIdentifier id: T) -> IndexPath? {
@@ -159,6 +161,21 @@ extension DiffableListView {
             }
             
             return nil
+        }
+    }
+    
+    func setupReorderHandler() {
+        if let canReorder = content.storedCanReorderHandler {
+            diffableDataSource.reorderingHandlers.canReorderItem = { [unowned self] identifier in
+                let indexPath = self.diffableDataSource.indexPath(for: identifier)
+                
+                return canReorder(indexPath, identifier)
+            }
+            
+        }
+        
+        if let didRecorder = content.storedDidRecorderHandler {
+            diffableDataSource.reorderingHandlers.didReorder = didRecorder
         }
     }
     
