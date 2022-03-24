@@ -53,8 +53,12 @@ open class DiffableListViewController: UIViewController {
         }
     }
     
-    public func cellExpanded(_ identifier: ItemIdentifier) -> Bool {
-        !collapsedItemIdentifiers.contains(identifier) &&
+    public func cellExpanded(_ identifier: ItemIdentifier?) -> Bool {
+        guard let identifier = identifier else {
+            return true
+        }
+        
+        return !collapsedItemIdentifiers.contains(identifier) &&
         !collapsedItemIdentifiers.contains(identifier.hashValue.description)
     }
     
