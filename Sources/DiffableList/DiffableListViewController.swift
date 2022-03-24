@@ -33,6 +33,10 @@ open class DiffableListViewController: UIViewController {
     }
     
     open func reload(applyingSnapshot: Bool = true, animating: Bool = true) {
+        /// 暂时性处理：在 reload 之前清空已折叠的 identifiers，若需要完美处理，需要在 applySnapshot 处，
+        /// 使用 snapshot.expand() / collapse() API 处理
+        collapsedItemIdentifiers.removeAll()
+        
         listView.setContent(list, applyingSnapshot: applyingSnapshot, animating: animating)
     }
     
