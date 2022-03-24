@@ -43,7 +43,8 @@ open class DiffableListViewController: UIViewController {
     }
     
     public func cellExpanded(_ identifier: ItemIdentifier) -> Bool {
-        !collapsedItemIdentifiers.contains(identifier)
+        !collapsedItemIdentifiers.contains(identifier) &&
+        !collapsedItemIdentifiers.contains(identifier.hashValue.description)
     }
     
     open override func viewDidLoad() {
@@ -72,7 +73,7 @@ private extension DiffableListViewController {
         let sectionSnapshot = dataSource.snapshot(for: sectionIdentifier)
         let snapshot = sectionSnapshot.snapshot(of: identifier)
         
-        return snapshot.items
+        return snapshot.rootItems
     }
     
     func insertOrRemoveCollapsedIdentifiers(parent identifier: ItemIdentifier, expanding: Bool = true) {
