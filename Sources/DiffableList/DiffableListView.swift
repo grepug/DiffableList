@@ -171,12 +171,20 @@ extension DiffableListView {
                 
                 return canReorder(indexPath, identifier)
             }
-            
         }
         
         if let didRecorder = content.storedDidRecorderHandler {
             diffableDataSource.reorderingHandlers.didReorder = didRecorder
         }
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveOfItemFromOriginalIndexPath originalIndexPath: IndexPath, atCurrentIndexPath currentIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+
+        if originalIndexPath.section == proposedIndexPath.section {
+            return proposedIndexPath
+        }
+        
+        return originalIndexPath
     }
     
     func makeCellConfig() -> UICollectionView.CellRegistration<UICollectionViewListCell, ItemIdentifier> {
