@@ -10,7 +10,11 @@ import UIKit
 @available(iOS 14.5, *)
 open class DiffableListViewController: UIViewController {
     lazy public var listView = makeListView()
-    var collapsedItemIdentifiers: Set<ItemIdentifier> = []
+    
+    var collapsedItemIdentifiers: Set<ItemIdentifier> {
+        get { listView.collapsedItemIdentifiers }
+        set { listView.collapsedItemIdentifiers = newValue }
+    }
     
     func makeListView() -> DiffableListView {
         let listView = DiffableListView(frame: view.bounds)
@@ -33,13 +37,20 @@ open class DiffableListViewController: UIViewController {
     }
     
     open func reload(applyingSnapshot: Bool = true, animating: Bool = true) {
-        /// 暂时性处理：在 reload 之前清空已折叠的 identifiers，若需要完美处理，需要在 applySnapshot 处，
-        /// 使用 snapshot.expand() / collapse() API 处理
+        let cachedCollapsedItemIdentifiers = collapsedItemIdentifiers
+        
         if applyingSnapshot {
             collapsedItemIdentifiers.removeAll()
         }
         
-        listView.setContent(list, applyingSnapshot: applyingSnapshot, animating: animating)
+        listView.setContent(list,
+                            applyingSnapshot: applyingSnapshot,
+                            collapsedItemIdentifiers: cachedCollapsedItemIdentifiers,
+                            animating: animating)
+        
+        if applyingSnapshot {
+            collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
+        }
     }
     
     public func cellExpanded(_ identifier: ItemIdentifier) -> Bool {
@@ -51,11 +62,11 @@ open class DiffableListViewController: UIViewController {
         super.viewDidLoad()
         
         dataSource.sectionSnapshotHandlers.willExpandItem = { [unowned self] identifier in
-            self.insertOrRemoveCollapsedIdentifiers(parent: identifier)
+            self.insertOrRemoveCollapsedIdentifier(identifier)
         }
         
         dataSource.sectionSnapshotHandlers.willCollapseItem = { [unowned self] identifier in
-            self.insertOrRemoveCollapsedIdentifiers(parent: identifier, expanding: false)
+            self.insertOrRemoveCollapsedIdentifier(identifier, expanding: false)
         }
     }
 }
@@ -66,25 +77,11 @@ private extension DiffableListViewController {
         listView.diffableDataSource
     }
     
-    func itemIdentifiers(ofParent identifier: ItemIdentifier) -> [ItemIdentifier] {
-        guard let parentIndexPath = dataSource.indexPath(for: identifier) else { return [] }
-        
-        let sectionIdentifier = list.sections[parentIndexPath.section].id
-        let sectionSnapshot = dataSource.snapshot(for: sectionIdentifier)
-        let snapshot = sectionSnapshot.snapshot(of: identifier)
-        
-        return snapshot.rootItems
-    }
-    
-    func insertOrRemoveCollapsedIdentifiers(parent identifier: ItemIdentifier, expanding: Bool = true) {
-        let itemIdentifiers = itemIdentifiers(ofParent: identifier)
-        
-        itemIdentifiers.forEach { id in
-            if expanding {
-                collapsedItemIdentifiers.remove(id)
-            } else {
-                collapsedItemIdentifiers.insert(id)
-            }
+    func insertOrRemoveCollapsedIdentifier(_ identifier: ItemIdentifier, expanding: Bool = true) {
+        if expanding {
+            collapsedItemIdentifiers.remove(identifier)
+        } else {
+            collapsedItemIdentifiers.insert(identifier)
         }
         
         reload(applyingSnapshot: false)

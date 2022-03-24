@@ -12,6 +12,8 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     public lazy var diffableDataSource = makeDataSource()
     var content: DLList = DLList {}
     
+    var collapsedItemIdentifiers: Set<ItemIdentifier> = []
+    
     private unowned var sectionProviderWrapper: SectionProviderWrapper
     private var appliedSnapshotSectionIds = Set<SectionIdentifier>()
     
@@ -75,16 +77,6 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
 
 @available(iOS 14.5, *)
 public extension DiffableListView {
-    func setContent(_ list: DLList, applyingSnapshot: Bool = true, animating: Bool = true) {
-        content = list
-        
-        if applyingSnapshot {
-            applySnapshot(animating: animating)
-        }
-        
-        setupReorderHandler()
-    }
-    
     func indexPath<T: Hashable>(forItemIdentifier id: T) -> IndexPath? {
         diffableDataSource.indexPath(for: id.hashValue.description)
     }
@@ -101,7 +93,18 @@ public extension DiffableListView {
 
 @available(iOS 14.5, *)
 extension DiffableListView {
-    func applySnapshot(animating: Bool) {
+    func setContent(_ list: DLList, applyingSnapshot: Bool = true, collapsedItemIdentifiers: Set<ItemIdentifier>, animating: Bool = true) {
+        content = list
+        
+        if applyingSnapshot {
+            applySnapshot(animating: animating,
+                          collapsedItemIdentifiers: collapsedItemIdentifiers)
+        }
+        
+        setupReorderHandler()
+    }
+    
+    func applySnapshot(animating: Bool, collapsedItemIdentifiers: Set<ItemIdentifier>) {
         var appliedSectionIds = Set<SectionIdentifier>()
         let prevAppliedSectionIds = appliedSnapshotSectionIds
         
@@ -113,7 +116,11 @@ extension DiffableListView {
                 snapshot.append([cell.id], to: cell.parentId)
                 
                 if let parentId = cell.parentId {
-                    snapshot.expand([parentId])
+                    if collapsedItemIdentifiers.contains(parentId) {
+                        snapshot.collapse([parentId])
+                    } else {
+                        snapshot.expand([parentId])
+                    }
                 }
             }
             
