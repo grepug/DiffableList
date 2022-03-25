@@ -11,10 +11,7 @@ import UIKit
 open class DiffableListViewController: UIViewController {
     lazy public var listView = makeListView()
     
-    var collapsedItemIdentifiers: Set<ItemIdentifier> {
-        get { listView.collapsedItemIdentifiers }
-        set { listView.collapsedItemIdentifiers = newValue }
-    }
+    var collapsedItemIdentifiers: Set<ItemIdentifier> = []
     
     func makeListView() -> DiffableListView {
         let listView = DiffableListView(frame: view.bounds)

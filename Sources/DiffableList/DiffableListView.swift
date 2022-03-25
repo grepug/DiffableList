@@ -12,8 +12,6 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     public lazy var diffableDataSource = makeDataSource()
     var content: DLList = DLList {}
     
-    var collapsedItemIdentifiers: Set<ItemIdentifier> = []
-    
     private unowned var sectionProviderWrapper: SectionProviderWrapper
     private var appliedSnapshotSectionIds = Set<SectionIdentifier>()
     
