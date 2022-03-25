@@ -37,6 +37,7 @@ open class DiffableListViewController: UIViewController {
         let cachedCollapsedItemIdentifiers = collapsedItemIdentifiers
         
         if applyingSnapshot {
+            /// apply snapshot 的时候必须所有不管是否折叠的 cell 都要 apply 进去，因此暂时将折叠的 ids 清空，这样在生成 list 的时候就是所有 cell
             collapsedItemIdentifiers.removeAll()
         }
         
@@ -47,6 +48,9 @@ open class DiffableListViewController: UIViewController {
         
         if applyingSnapshot {
             collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
+            
+            /// apply snapshot 之后，重新生成 list，过滤掉折叠的 cell，以便在 dequeue cell 的时候，根据 indexPath 获取的是正确的 cell
+            listView.setContent(list, applyingSnapshot: false)
         }
     }
     

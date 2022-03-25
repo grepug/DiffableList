@@ -91,7 +91,7 @@ public extension DiffableListView {
 
 @available(iOS 14.5, *)
 extension DiffableListView {
-    func setContent(_ list: DLList, applyingSnapshot: Bool = true, collapsedItemIdentifiers: Set<ItemIdentifier>, animating: Bool = true) {
+    func setContent(_ list: DLList, applyingSnapshot: Bool = true, collapsedItemIdentifiers: Set<ItemIdentifier> = [], animating: Bool = true) {
         content = list
         
         if applyingSnapshot {
