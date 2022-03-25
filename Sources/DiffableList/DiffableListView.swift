@@ -244,6 +244,13 @@ extension DiffableListView {
         content.sections[indexPath.section]
     }
     
+    func itemExpanded(_ id: ItemIdentifier, at indexPath: IndexPath) -> Bool {
+        let sectionId = section(at: indexPath).id
+        let snapshot = diffableDataSource.snapshot(for: sectionId)
+        
+        return snapshot.isExpanded(id)
+    }
+    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cellConvertible = cellConvertible(at: indexPath)
         
