@@ -59,6 +59,14 @@ open class DiffableListViewController: UIViewController {
         !collapsedItemIdentifiers.contains(identifier.hashValue.description)
     }
     
+    public func collapseItem(_ identifier: ItemIdentifier) {
+        collapsedItemIdentifiers.insert(identifier)
+    }
+    
+    public func collapseItem<T: Hashable>(withTag tag: T) {
+        collapsedItemIdentifiers.insert(tag.hashValue.description)
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
         
