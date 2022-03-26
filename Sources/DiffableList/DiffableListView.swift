@@ -236,6 +236,7 @@ extension DiffableListView {
         }
     }
     
+    // MARK: ⚠️ 在这里去获取折叠和未折叠的 list content！！！！！
     func cellConvertible(at indexPath: IndexPath) -> CellConvertible {
         content.sections[indexPath.section].cells[indexPath.item]
     }

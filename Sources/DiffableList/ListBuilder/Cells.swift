@@ -16,6 +16,7 @@ public protocol CellConvertible {
     var id: ItemIdentifier { set get }
     var parentId: ItemIdentifier? { get set }
     var configuration: UIContentConfiguration { get }
+    var name: String? { get set }
     
     func asCell() -> [CellConvertible]
 }
@@ -38,6 +39,7 @@ public struct DLCell: CellConvertible {
     public var id = UUID().uuidString
     public var parentId: ItemIdentifier?
     public var configuration: UIContentConfiguration
+    public var name: String?
     
     var storedBackgroundConfiguration: UIBackgroundConfiguration?
     var storedContextMenu: UIContextMenuConfiguration?
@@ -129,6 +131,12 @@ public struct DLCell: CellConvertible {
     public func indentLevel(_ level: Int) -> Self {
         var me = self
         me.storedIndentLevel = level
+        return me
+    }
+    
+    public func name(_ name: String) -> Self {
+        var me = self
+        me.name = name
         return me
     }
 }
@@ -242,6 +250,11 @@ public struct DLImage: CellConfigurationConvertible {
 }
 
 extension Array: CellConvertible where Element == CellConvertible {
+    public var name: String? {
+        get { first?.name ?? "" }
+        set {}
+    }
+    
     public var isCollapsed: Bool {
         get { false }
         set {}
