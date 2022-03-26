@@ -145,7 +145,9 @@ extension DiffableListView {
         makingSnapshotsCompletion?()
         
         for (section, snapshot) in snapshots {
-            diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating)
+            if diffableDataSource.snapshot(for: section).items != snapshot.items {
+                diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating)
+            }
         }
     }
     
@@ -205,9 +207,13 @@ extension DiffableListView {
     
     func makeCellConfig() -> UICollectionView.CellRegistration<UICollectionViewListCell, ItemIdentifier> {
         .init { [unowned self] cell, indexPath, itemIdentifier in
-            let cellConvertible = self.cellConvertible(at: indexPath)
+            guard let cellConvertible = self.cellConvertible(at: indexPath) else {
+                fatalError()
+            }
             
             guard cellConvertible.id == itemIdentifier else {
+                print("@@ cellConvertible inconsistant", indexPath)
+                
                 fatalError()
             }
             
@@ -247,9 +253,8 @@ extension DiffableListView {
         }
     }
     
-    // MARK: ⚠️ 在这里去获取折叠和未折叠的 list content！！！！！
-    func cellConvertible(at indexPath: IndexPath) -> CellConvertible {
-        content.sections[indexPath.section].cells[indexPath.item]
+    func cellConvertible(at indexPath: IndexPath) -> CellConvertible? {
+        content.sections.at(indexPath.section)?.cells.at(indexPath.item)
     }
     
     func section(at indexPath: IndexPath) -> DLSection {
@@ -264,7 +269,7 @@ extension DiffableListView {
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cellConvertible = cellConvertible(at: indexPath)
+        let cellConvertible = cellConvertible(at: indexPath)!
         
         if let cell = cellConvertible as? DLCell {
             cell.storedDidSelectedAction?(indexPath)
@@ -274,7 +279,7 @@ extension DiffableListView {
     }
     
     public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let cellConvertible = cellConvertible(at: indexPath)
+        let cellConvertible = cellConvertible(at: indexPath)!
         
         if let cell = cellConvertible as? DLCell {
             return cell.storedContextMenu
@@ -303,5 +308,15 @@ class SectionProviderWrapper {
 extension NSCollectionLayoutSection {
     static var empty: NSCollectionLayoutSection {
         NSCollectionLayoutSection(group: .horizontal(layoutSize: .init(widthDimension: .absolute(0.01), heightDimension: .absolute(0.01)), subitem: .init(layoutSize: .init(widthDimension: .absolute(0.01), heightDimension: .absolute(0.01))), count: 1))
+    }
+}
+
+extension Array {
+    func at(_ index: Int) -> Element? {
+        if count > index && index >= 0 {
+            return self[index]
+        }
+        
+        return nil
     }
 }
