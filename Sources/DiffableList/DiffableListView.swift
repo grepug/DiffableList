@@ -91,20 +91,25 @@ public extension DiffableListView {
 
 @available(iOS 14.5, *)
 extension DiffableListView {
-    func setContent(_ list: DLList, applyingSnapshot: Bool = true, collapsedItemIdentifiers: Set<ItemIdentifier> = [], animating: Bool = true) {
+    func setContent(_ list: DLList, applyingSnapshot: Bool = true,
+                    collapsedItemIdentifiers: Set<ItemIdentifier> = [],
+                    animating: Bool = true,
+                    makingSnapshotsCompletion completion: (() -> Void)? = nil) {
         content = list
         
         if applyingSnapshot {
             applySnapshot(animating: animating,
-                          collapsedItemIdentifiers: collapsedItemIdentifiers)
+                          collapsedItemIdentifiers: collapsedItemIdentifiers,
+                          makingSnapshotsCompletion: completion)
         }
         
         setupReorderHandler()
     }
     
-    func applySnapshot(animating: Bool, collapsedItemIdentifiers: Set<ItemIdentifier>) {
+    func applySnapshot(animating: Bool, collapsedItemIdentifiers: Set<ItemIdentifier>, makingSnapshotsCompletion: (() -> Void)? = nil) {
         var appliedSectionIds = Set<SectionIdentifier>()
         let prevAppliedSectionIds = appliedSnapshotSectionIds
+        var snapshots: [(SectionIdentifier, NSDiffableDataSourceSectionSnapshot<ItemIdentifier>)] = []
         
         for section in content.sections {
             var snapshot = diffableDataSource.snapshot(for: section.id)
@@ -124,7 +129,7 @@ extension DiffableListView {
             
             appliedSectionIds.insert(section.id)
             appliedSnapshotSectionIds.insert(section.id)
-            diffableDataSource.apply(snapshot, to: section.id, animatingDifferences: animating)
+            snapshots.append((section.id, snapshot))
         }
         
         let notAppliedSectionIds = prevAppliedSectionIds.subtracting(appliedSectionIds)
@@ -134,7 +139,13 @@ extension DiffableListView {
             snapshot.deleteAll()
             
             appliedSnapshotSectionIds.insert(sectionId)
-            diffableDataSource.apply(snapshot, to: sectionId, animatingDifferences: animating)
+            snapshots.append((sectionId, snapshot))
+        }
+        
+        makingSnapshotsCompletion?()
+        
+        for (section, snapshot) in snapshots {
+            diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating)
         }
     }
     

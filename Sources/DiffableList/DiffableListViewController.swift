@@ -44,14 +44,13 @@ open class DiffableListViewController: UIViewController {
         listView.setContent(list,
                             applyingSnapshot: applyingSnapshot,
                             collapsedItemIdentifiers: cachedCollapsedItemIdentifiers,
-                            animating: animating)
-        
-        if applyingSnapshot {
-            collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
+                            animating: animating,
+                            makingSnapshotsCompletion: { [unowned self] in
+            self.collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
             
             /// apply snapshot 之后，重新生成 list，过滤掉折叠的 cell，以便在 dequeue cell 的时候，根据 indexPath 获取的是正确的 cell
-            listView.setContent(list, applyingSnapshot: false)
-        }
+            self.listView.setContent(self.list, applyingSnapshot: false)
+        })
     }
     
     public func cellExpanded(_ identifier: ItemIdentifier?) -> Bool {
