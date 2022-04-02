@@ -147,7 +147,9 @@ extension DiffableListView {
         
         makingSnapshotsCompletion?()
         
-        diffableDataSource.apply(snapshot, animatingDifferences: animating)
+        if !notAppliedSectionIds.isEmpty {
+            diffableDataSource.apply(snapshot, animatingDifferences: animating)
+        }
         
         for (section, snapshot) in snapshots {
             let isFirstAppling = !prevAppliedSectionIds.contains(section)
