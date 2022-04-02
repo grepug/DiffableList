@@ -9,6 +9,10 @@ import UIKit
 import SwiftUI
 
 public struct DLContentConfiguration {
+    public init(contentConfiguration: UIContentConfiguration) {
+        self.contentConfiguration = contentConfiguration
+    }
+    
     public let id = UUID()
     let contentConfiguration: UIContentConfiguration
 }
@@ -41,14 +45,21 @@ public extension DLContentConfiguration {
         return .init(contentConfiguration: config)
     }
     
-    static func textField(text: String, font: UIFont? = nil, color: UIColor? = nil, paddings: UIEdgeInsets? = nil, height: CGFloat = 44, valueDidChange: ((String) -> Void)? = nil, editingDidEnd: ((String) -> Void)? = nil) -> Self {
+    static func textField(text: String, placeholder: String? = nil, font: UIFont? = nil, color: UIColor? = nil, paddings: UIEdgeInsets? = nil, height: CGFloat = 44, valueDidChange: ((String) -> Void)? = nil, editingDidEnd: ((String) -> Void)? = nil) -> Self {
         let config = TextFieldCellConfiguration(text: text,
+                                                placeholder: placeholder,
                                                 font: font,
                                                 color: color,
                                                 paddings: paddings ?? .init(top: 8, left: 16, bottom: 8, right: 16),
                                                 height: height,
                                                 valueDidChange: valueDidChange,
                                                 editingDidEnd: editingDidEnd)
+        return .init(contentConfiguration: config)
+    }
+    
+    static func datePicker(labelText: String, date: Date, mode: UIDatePicker.Mode = .date, valueDidChange: ((Date) -> Void)? = nil) -> Self {
+        let config = DatePickerInlineCellConfiguration(date: date, text: labelText, mode: mode, action: valueDidChange)
+        
         return .init(contentConfiguration: config)
     }
 }

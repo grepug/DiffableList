@@ -24,6 +24,7 @@ public struct DLSection: SectionConvertible, Identifiable {
     var isFirstCellAsHeader: Bool = false
     var headerText: String?
     var footerText: String?
+    var storedHeaderTopPadding: CGFloat?
     
     public init(@ListBuilder cells: @escaping () -> [CellConvertible]) {
         self.cells = cells()
@@ -54,6 +55,12 @@ public struct DLSection: SectionConvertible, Identifiable {
     public func footer(_ text: String) -> Self {
         var me = self
         me.footerText = text
+        return me
+    }
+    
+    public func headerTopPadding(_ top: CGFloat) -> Self {
+        var me = self
+        me.storedHeaderTopPadding = top
         return me
     }
 }

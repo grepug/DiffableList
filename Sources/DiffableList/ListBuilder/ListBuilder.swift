@@ -20,6 +20,10 @@ public extension ListBuilder {
         components.flatMap { $0.asSection() }
     }
     
+    static func buildBlock(_ components: [SectionConvertible]) -> [DLSection] {
+        components.flatMap { $0.asSection() }
+    }
+    
     static func buildBlock(_ components: CellConvertible...) -> [CellConvertible] {
         components.flatMap { $0.asCell() }
     }

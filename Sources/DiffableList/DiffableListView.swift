@@ -56,6 +56,14 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
                 listConfig.footerMode = .supplementary
             }
             
+            if #available(iOS 15.0, *) {
+                if let padding = section.storedHeaderTopPadding {
+                    listConfig.headerTopPadding = padding
+                }
+            } else {
+                
+            }
+            
             listConfig.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
                 let cellConvertible = self.cellConvertible(at: indexPath)
                 
@@ -105,6 +113,13 @@ extension DiffableListView {
         
         setupReorderHandler()
     }
+    
+//    func applySnapshot2() {
+//        var snapshot = diffableDataSource.snapshot()
+//        snapshot.appendItems(<#T##identifiers: [ItemIdentifier]##[ItemIdentifier]#>, toSection: <#T##SectionIdentifier?#>)
+//
+//        snapshot.deleteSections(<#T##identifiers: [SectionIdentifier]##[SectionIdentifier]#>)
+//    }
     
     func applySnapshot(animating: Bool, collapsedItemIdentifiers: Set<ItemIdentifier>, makingSnapshotsCompletion: (() -> Void)? = nil) {
         var appliedSectionIds = Set<SectionIdentifier>()

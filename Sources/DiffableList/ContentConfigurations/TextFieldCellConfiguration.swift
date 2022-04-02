@@ -11,6 +11,7 @@ import UIKit
 
 struct TextFieldCellConfiguration: UIContentConfiguration {
     var text: String
+    var placeholder: String?
     var font: UIFont?
     var color: UIColor?
     var paddings: UIEdgeInsets = .init(top: 8, left: 16, bottom: 8, right: 16)
@@ -77,6 +78,7 @@ extension TextFieldCellConfiguration.View {
     
     func apply(config: Config) {
         textField.text = config.text
+        textField.placeholder = config.placeholder
         
         if let font = config.font {
             textField.font = font
