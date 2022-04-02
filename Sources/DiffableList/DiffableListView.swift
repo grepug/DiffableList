@@ -114,13 +114,6 @@ extension DiffableListView {
         setupReorderHandler()
     }
     
-//    func applySnapshot2() {
-//        var snapshot = diffableDataSource.snapshot()
-//        snapshot.appendItems(<#T##identifiers: [ItemIdentifier]##[ItemIdentifier]#>, toSection: <#T##SectionIdentifier?#>)
-//
-//        snapshot.deleteSections(<#T##identifiers: [SectionIdentifier]##[SectionIdentifier]#>)
-//    }
-    
     func applySnapshot(animating: Bool, collapsedItemIdentifiers: Set<ItemIdentifier>, makingSnapshotsCompletion: (() -> Void)? = nil) {
         var appliedSectionIds = Set<SectionIdentifier>()
         let prevAppliedSectionIds = appliedSnapshotSectionIds
@@ -148,16 +141,13 @@ extension DiffableListView {
         }
         
         let notAppliedSectionIds = prevAppliedSectionIds.subtracting(appliedSectionIds)
+        var snapshot = diffableDataSource.snapshot()
         
-        for sectionId in notAppliedSectionIds {
-            var snapshot = diffableDataSource.snapshot(for: sectionId)
-            snapshot.deleteAll()
-            
-            appliedSnapshotSectionIds.insert(sectionId)
-            snapshots.append((sectionId, snapshot))
-        }
+        snapshot.deleteSections(Array(notAppliedSectionIds))
         
         makingSnapshotsCompletion?()
+        
+        diffableDataSource.apply(snapshot, animatingDifferences: animating)
         
         for (section, snapshot) in snapshots {
             let isFirstAppling = !prevAppliedSectionIds.contains(section)
