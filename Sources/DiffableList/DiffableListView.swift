@@ -115,7 +115,7 @@ extension DiffableListView {
     }
     
     func applySnapshot(animating: Bool, collapsedItemIdentifiers: Set<ItemIdentifier>, makingSnapshotsCompletion: (() -> Void)? = nil) {
-        var appliedSectionIds = Set<SectionIdentifier>()
+        var currentAppliedSectionIds = Set<SectionIdentifier>()
         let prevAppliedSectionIds = appliedSnapshotSectionIds
         var snapshots: [(SectionIdentifier, NSDiffableDataSourceSectionSnapshot<ItemIdentifier>)] = []
         
@@ -135,12 +135,13 @@ extension DiffableListView {
                 }
             }
             
-            appliedSectionIds.insert(section.id)
-            appliedSnapshotSectionIds.insert(section.id)
+            currentAppliedSectionIds.insert(section.id)
             snapshots.append((section.id, snapshot))
         }
         
-        let notAppliedSectionIds = prevAppliedSectionIds.subtracting(appliedSectionIds)
+        appliedSnapshotSectionIds = currentAppliedSectionIds
+        
+        let notAppliedSectionIds = prevAppliedSectionIds.subtracting(currentAppliedSectionIds)
         var snapshot = diffableDataSource.snapshot()
         
         snapshot.deleteSections(Array(notAppliedSectionIds))
