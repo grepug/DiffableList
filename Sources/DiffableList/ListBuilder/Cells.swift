@@ -102,7 +102,7 @@ public struct DLCell: CellConvertible {
         return cell
     }
     
-    public func onTap(action: @escaping (IndexPath) -> Void) -> Self {
+    public func onTap(perform action: @escaping (IndexPath) -> Void) -> Self {
         var me = self
         me.storedDidSelectedAction = action
         
