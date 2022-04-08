@@ -53,6 +53,16 @@ open class DiffableListViewController: UIViewController {
         })
     }
     
+    public func becomeFirstResponder(at indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            if let textField = self.listView.cellForItem(at: indexPath)?.firstTextField {
+                if textField.text?.isEmpty != false {
+                    textField.becomeFirstResponder()
+                }
+            }
+        }
+    }
+    
     public func cellExpanded(_ identifier: ItemIdentifier?) -> Bool {
         guard let identifier = identifier else {
             return true

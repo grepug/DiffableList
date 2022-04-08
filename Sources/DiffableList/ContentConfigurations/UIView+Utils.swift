@@ -34,3 +34,29 @@ public extension UITextField {
         inputAccessoryView = .makeDoneButton(inputView: self)
     }
 }
+
+extension UIView {
+    func subviews<T: UIView>(ofType WhatType: T.Type) -> [T] {
+        var result = subviews.compactMap { $0 as? T }
+        
+        for sub in subviews {
+            result.append(contentsOf: sub.subviews(ofType: WhatType))
+        }
+        
+        return result
+    }
+    
+    var firstTextField: UITextField? {
+        subviews(ofType: UITextField.self).first
+    }
+    
+    var isFirstResponderInSubviews: Bool {
+        subviews(ofType: UITextField.self).contains { $0.isFirstResponder } ||
+            subviews(ofType: UITextView.self).contains { $0.isFirstResponder }
+    }
+    
+    var firstResponder: UIView? {
+        subviews(ofType: UITextField.self).first { $0.isFirstResponder } ??
+            subviews(ofType: UITextView.self).first { $0.isFirstResponder }
+    }
+}
