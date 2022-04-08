@@ -63,6 +63,12 @@ open class DiffableListViewController: UIViewController {
         }
     }
     
+    public func setTopPadding() {
+        if #available(iOS 15.0, *) {
+            listView.contentInset.top = 16
+        }
+    }
+    
     public func cellExpanded(_ identifier: ItemIdentifier?) -> Bool {
         guard let identifier = identifier else {
             return true
