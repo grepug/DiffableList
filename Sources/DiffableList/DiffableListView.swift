@@ -203,7 +203,11 @@ extension DiffableListView {
         }
         
         if let didRecorder = content.storedDidRecorderHandler {
+            #if targetEnvironment(macCatalyst)
+            diffableDataSource.reorderingHandlers.willReorder = didRecorder
+            #else
             diffableDataSource.reorderingHandlers.didReorder = didRecorder
+            #endif
         }
     }
     
