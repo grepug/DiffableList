@@ -9,24 +9,30 @@ import UIKit
 import DiffableList
 import SwiftUI
 
-class ViewController: UIViewController {
-    lazy var listView = makeListView()
-    
-    var data: [String] = ["1", "2"].shuffled() {
-        didSet {
-            setupListContent()
-        }
-    }
+struct Item {
+    let id = UUID()
+    let value: String
+    let color: Color
+    var height: CGFloat = 44
+}
+
+class ViewController: DiffableListViewController {
+    var data: [Item] = [
+        .init(value: "1", color: .red, height: 55),
+        .init(value: "2", color: .green, height: 69),
+        .init(value: "3", color: .blue, height: 12),
+        .init(value: "4", color: .brown, height: 59),
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .red
-        view.addSubview(listView)
-        
-        navigationItem.rightBarButtonItem = .init(title: "reload", primaryAction: .init { _ in
+        navigationItem.rightBarButtonItem = .init(title: "Reload", primaryAction: .init { _ in
             self.data = self.data.shuffled()
+            self.reload()
         })
+        
+        reload(animating: false)
     }
     
     func makeListView() -> DiffableListView {
@@ -36,45 +42,19 @@ class ViewController: UIViewController {
         return listView
     }
     
-    func setupListContent() {
-        let list = DLList {
-            for i in ["1000", "1001"] {
-                Section {
-                    HeaderCell {
-                        Text("我是头部 \(i)")
-                    }
-                    .tag(i)
-                    
-                    for j in self.data {
-                        Cell {
-                            Text("haha \(j)")
-                                .color(.green)
-                            SecondaryText("mgj", color: .red)
-                        }
-                        .accessories([.disclosureIndicator()])
-                        .tag(i + "101" + j)
-                        
-                        Cell(toParentVC: self) {
-                            SwiftUI.Text("\(j)")
-                                .frame(height: 200)
-                        }
-                        .tag(i + "100" + j)
-                    }
-                    
+    override var list: DLList {
+        DLList { [unowned self] in
+            DLSection {
+                for item in self.data {
+                    DLCell(using: .swiftUI(movingTo: self, content: {
+                        Text(item.value)
+                            .foregroundColor(item.color)
+                            .frame(height: item.height)
+                    }))
+                    .tag(item.id)
                 }
-                .tag(i)
             }
+            .tag(0)
         }
-        
-        print(list)
-        
-        listView.content = list
-    }
-    
-}
-
-extension Cell {
-    init<Content: View>(toParentVC parentVC: UIViewController, @ViewBuilder content: @escaping () -> Content) {
-        self.init(using: SwiftUIWrapperCellConfiguration(toParentVC: parentVC, content: content))
     }
 }
