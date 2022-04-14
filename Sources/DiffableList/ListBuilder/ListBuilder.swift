@@ -56,6 +56,14 @@ public extension ListBuilder {
         (component ?? []).flatMap { $0.asCell() }
     }
     
+    public static func buildEither(first component: [DLSection]) -> [DLSection] {
+        component
+    }
+    
+    public static func buildEither(second component: [DLSection]) -> [DLSection] {
+        component
+    }
+    
     static func buildEither(first component: [CellConvertible]) -> [CellConvertible] {
         component.flatMap { $0.asCell() }
     }
