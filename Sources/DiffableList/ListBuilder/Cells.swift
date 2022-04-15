@@ -45,6 +45,7 @@ public struct DLCell: CellConvertible {
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory] = []
     var storedDidSelectedAction: ((IndexPath) -> Void)?
+    var storedLeadingSwipeActions: [UIContextualAction]?
     var storedTrailingSwipeActions: [UIContextualAction]?
     var storedDidEndDisplay: ((UICollectionViewCell, IndexPath) -> Void)?
     var storedDisablingHighlight: Bool?
@@ -91,6 +92,13 @@ public struct DLCell: CellConvertible {
     public func swipeTrailingActions(_ actions: [UIContextualAction]) -> Self {
         var me = self
         me.storedTrailingSwipeActions = actions
+        
+        return me
+    }
+    
+    public func swipeLeadingActions(_ actions: [UIContextualAction]) -> Self {
+        var me = self
+        me.storedLeadingSwipeActions = actions
         
         return me
     }

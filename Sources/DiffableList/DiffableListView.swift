@@ -74,6 +74,16 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
                 return nil
             }
             
+            listConfig.leadingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
+                let cellConvertible = self.cellConvertible(at: indexPath)
+                
+                if let cell = cellConvertible as? DLCell {
+                    return .init(actions: cell.storedLeadingSwipeActions ?? [])
+                }
+                    
+                return nil
+            }
+            
             let layoutSection = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: env)
             
             return layoutSection
