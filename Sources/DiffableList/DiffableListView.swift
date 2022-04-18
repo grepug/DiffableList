@@ -235,6 +235,9 @@ extension DiffableListView {
             guard cellConvertible.id == itemIdentifier else {
                 print("@@ cellConvertible inconsistant", indexPath)
                 
+                print(cellConvertible)
+                print(cellConvertible.name)
+                
                 fatalError()
             }
             
