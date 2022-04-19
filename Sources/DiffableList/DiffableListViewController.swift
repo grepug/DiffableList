@@ -97,6 +97,12 @@ open class DiffableListViewController: UIViewController {
             self.insertOrRemoveCollapsedIdentifier(identifier, expanding: false)
         }
     }
+    
+    open override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        listView.isEditing = editing
+    }
 }
 
 @available(iOS 14.5, *)
