@@ -236,7 +236,7 @@ extension DiffableListView {
                 print("@@ cellConvertible inconsistant", indexPath)
                 
                 print(cellConvertible)
-                print(cellConvertible.name)
+                print(cellConvertible.name ?? "")
                 
                 fatalError()
             }
