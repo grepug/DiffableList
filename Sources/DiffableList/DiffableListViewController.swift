@@ -13,7 +13,7 @@ open class DiffableListViewController: UIViewController {
     
     var collapsedItemIdentifiers: Set<ItemIdentifier> = []
     
-    func makeListView() -> DiffableListView {
+    open func makeListView() -> DiffableListView {
         let listView = DiffableListView(frame: view.bounds)
         view.addSubview(listView)
         
