@@ -14,6 +14,7 @@ struct TextFieldCellConfiguration: UIContentConfiguration {
     var placeholder: String?
     var font: UIFont?
     var color: UIColor?
+    var keyboard: UIKeyboardType = .default
     var paddings: UIEdgeInsets = .init(top: 8, left: 16, bottom: 8, right: 16)
     var height: CGFloat = 44
     var valueDidChange: ((String) -> Void)?
@@ -87,6 +88,8 @@ extension TextFieldCellConfiguration.View {
         if let color = config.color {
             textField.textColor = color
         }
+        
+        textField.keyboardType = config.keyboard
     }
 }
 
