@@ -10,7 +10,9 @@ import UIKit
 @available(iOS 14.5, *)
 public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     public lazy var diffableDataSource = makeDataSource()
-    var content: DLList = DLList {}
+    private(set) var content: DLList = DLList {}
+    var prevContent: DLList = DLList {}
+    var currentApplyingSection: SectionIdentifier?
     
     private unowned var sectionProviderWrapper: SectionProviderWrapper
     private var appliedSnapshotSectionIds = Set<SectionIdentifier>()
@@ -113,8 +115,14 @@ extension DiffableListView {
                     collapsedItemIdentifiers: Set<ItemIdentifier> = [],
                     animating: Bool = true,
                     makingSnapshotsCompletion completion: (() -> Void)? = nil) {
-        content = list
+        if #unavailable(iOS 15.0) {
+            if applyingSnapshot {
+                prevContent = content
+            }
+        }
         
+        content = list
+
         if applyingSnapshot {
             applySnapshot(animating: animating,
                           collapsedItemIdentifiers: collapsedItemIdentifiers,
@@ -167,6 +175,7 @@ extension DiffableListView {
             let isSnapshotChanged = diffableDataSource.snapshot(for: section).items != snapshot.items
             
             if isFirstAppling || isSnapshotChanged {
+                currentApplyingSection = section
                 diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating)
             }
         }
@@ -241,6 +250,8 @@ extension DiffableListView {
                 fatalError()
             }
             
+            let content = currentContent(at: indexPath)
+            
             if let backgroundConfiguration = content.storedDefaultBackgroundConfiguration {
                 cell.backgroundConfiguration = backgroundConfiguration
             }
@@ -277,8 +288,32 @@ extension DiffableListView {
         }
     }
     
+    func indexForSection(_ section: SectionIdentifier) -> Int {
+        let sectionCount = content.sections.count
+        
+        for index in 0..<sectionCount {
+            if content.sections[index].id == section {
+                return index
+            }
+        }
+        
+        return 0
+    }
+    
+    func currentContent(at indexPath: IndexPath) -> DLList {
+        if #unavailable(iOS 15.0) {
+            if let section = currentApplyingSection,
+               indexForSection(section) < indexPath.section &&
+                !prevContent.sections.isEmpty {
+                return prevContent
+            }
+        }
+        
+        return content
+    }
+    
     func cellConvertible(at indexPath: IndexPath) -> CellConvertible? {
-        content.sections.at(indexPath.section)?.cells.at(indexPath.item)
+        currentContent(at: indexPath).sections.at(indexPath.section)?.cells.at(indexPath.item)
     }
     
     func section(at indexPath: IndexPath) -> DLSection {
