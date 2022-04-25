@@ -63,6 +63,16 @@ open class DiffableListViewController: UIViewController {
         }
     }
     
+    public func becomeFirstResponderForTextView(at indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            if let textField = self.listView.cellForItem(at: indexPath)?.subviews(ofType: UITextView.self).first {
+                if textField.text?.isEmpty != false {
+                    textField.becomeFirstResponder()
+                }
+            }
+        }
+    }
+    
     public func setTopPadding() {
         if #available(iOS 15.0, *) {
             listView.contentInset.top = 16
