@@ -15,7 +15,7 @@ class LabelResuableView: UICollectionReusableView {
         
         label.font = .preferredFont(forTextStyle: .footnote)
         label.textColor = .secondaryLabel
-        label.lineBreakMode = .byCharWrapping
+        label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         
         addSubview(label)
@@ -33,7 +33,7 @@ class LabelResuableView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func config(text: String, uppercased: Bool = true) {
+    func config(text: String, uppercased: Bool = false) {
         label.text = uppercased ? text.uppercased() : text
     }
 }
