@@ -55,7 +55,7 @@ open class DiffableListViewController: UIViewController {
     
     public func becomeFirstResponder(at indexPath: IndexPath) {
         DispatchQueue.main.async {
-            if let textField = self.listView.cellForItem(at: indexPath)?.firstTextField {
+            if let textField = self.listView.cellForItem(at: indexPath)?.subviews(ofType: UITextField.self).first(where: { $0.textInputContextIdentifier == nil }) {
                 if textField.text?.isEmpty != false {
                     textField.becomeFirstResponder()
                 }
