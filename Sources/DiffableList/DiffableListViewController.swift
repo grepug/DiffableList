@@ -7,7 +7,6 @@
 
 import UIKit
 
-@available(iOS 14.5, *)
 open class DiffableListViewController: UIViewController {
     lazy public var listView = makeListView()
     
@@ -115,7 +114,6 @@ open class DiffableListViewController: UIViewController {
     }
 }
 
-@available(iOS 14.5, *)
 private extension DiffableListViewController {
     var dataSource: UICollectionViewDiffableDataSource<SectionIdentifier, ItemIdentifier> {
         listView.diffableDataSource

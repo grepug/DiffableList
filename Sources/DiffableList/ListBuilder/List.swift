@@ -7,13 +7,12 @@
 
 import UIKit
 
-@available(iOS 14.5, *)
 public struct DLList {
     public var sections: [DLSection]
     
     var storedOnTapAction: ((IndexPath) -> Void)?
     var storedDefaultBackgroundConfiguration: UIBackgroundConfiguration?
-    var storedItemSeparatorHandler: UICollectionLayoutListConfiguration.ItemSeparatorHandler?
+    var storedHideBottomSeparator: Bool = false
     var storedCanReorderHandler: ((IndexPath?, ItemIdentifier) -> Bool)?
     var storedDidRecorderHandler: ((NSDiffableDataSourceTransaction<SectionIdentifier, ItemIdentifier>) -> Void)?
     
@@ -33,9 +32,9 @@ public struct DLList {
         return me
     }
     
-    public func itemSeparatorHandler(_ handler: @escaping UICollectionLayoutListConfiguration.ItemSeparatorHandler) -> Self {
+    public func hideBottomSeparator(_ isTrue: Bool = true) -> Self {
         var me = self
-        me.storedItemSeparatorHandler = handler
+        me.storedHideBottomSeparator = isTrue
         return me
     }
     

@@ -7,7 +7,6 @@
 
 import UIKit
 
-@available(iOS 14.5, *)
 public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     public lazy var diffableDataSource = makeDataSource()
     private(set) var content: DLList = DLList {}
@@ -46,7 +45,14 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
             
             var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
             
-            listConfig.itemSeparatorHandler = self.content.storedItemSeparatorHandler
+            if #available(iOS 14.5, *), self.content.storedHideBottomSeparator {
+                listConfig.itemSeparatorHandler = { indexPath, config in
+                    var config = config
+                    config.bottomSeparatorVisibility = .hidden
+                    
+                    return config
+                }
+            }
             
             if section.headerText != nil {
                 listConfig.headerMode = .supplementary
@@ -93,7 +99,6 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     }
 }
 
-@available(iOS 14.5, *)
 public extension DiffableListView {
     func indexPath<T: Hashable>(forItemIdentifier id: T) -> IndexPath? {
         diffableDataSource.indexPath(for: id.hashValue.description)
@@ -109,7 +114,6 @@ public extension DiffableListView {
     }
 }
 
-@available(iOS 14.5, *)
 extension DiffableListView {
     func setContent(_ list: DLList, applyingSnapshot: Bool = true,
                     collapsedItemIdentifiers: Set<ItemIdentifier> = [],

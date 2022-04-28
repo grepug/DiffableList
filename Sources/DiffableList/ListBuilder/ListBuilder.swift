@@ -14,7 +14,6 @@ public struct ListBuilder {
     }
 }
 
-@available(iOS 14.5, *)
 public extension ListBuilder {
     static func buildBlock(_ components: SectionConvertible...) -> [DLSection] {
         components.flatMap { $0.asSection() }
