@@ -40,7 +40,7 @@ open class DiffableListViewController: UIViewController {
             collapsedItemIdentifiers.removeAll()
         }
         
-        listView.setContent(list,
+        listView.setContent(filteredList,
                             applyingSnapshot: applyingSnapshot,
                             collapsedItemIdentifiers: cachedCollapsedItemIdentifiers,
                             animating: animating,
@@ -48,7 +48,7 @@ open class DiffableListViewController: UIViewController {
             self.collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
             
             /// apply snapshot 之后，重新生成 list，过滤掉折叠的 cell，以便在 dequeue cell 的时候，根据 indexPath 获取的是正确的 cell
-            self.listView.setContent(self.list, applyingSnapshot: false)
+            self.listView.setContent(self.filteredList, applyingSnapshot: false)
         })
     }
     
@@ -127,5 +127,27 @@ private extension DiffableListViewController {
         }
         
         reload(applyingSnapshot: false)
+    }
+    
+    var filteredList: DLList {
+        let sections = list.sections.map { section -> DLSection in
+            let cells = section.cells.compactMap { cell -> CellConvertible? in
+                if cellExpanded(cell.parentId) {
+                    return cell
+                }
+                
+                return nil
+            }
+            
+            var section = section
+            section.cells = cells
+            
+            return section
+        }
+        
+        var list = list
+        list.sections = sections
+        
+        return list
     }
 }

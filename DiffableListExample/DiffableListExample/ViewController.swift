@@ -28,33 +28,62 @@ class ViewController: DiffableListViewController {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = .init(title: "Reload", primaryAction: .init { _ in
-            self.data = self.data.shuffled()
+//            self.data = self.data.shuffled()
             self.reload()
         })
         
         reload(animating: false)
     }
     
-    func makeListView() -> DiffableListView {
-        let listView = DiffableListView(frame: view.bounds)
-        
-        
-        return listView
-    }
-    
     override var list: DLList {
         DLList { [unowned self] in
             DLSection {
-                for item in self.data {
-                    DLCell(using: .swiftUI(movingTo: self, content: {
-                        Text(item.value)
-                            .foregroundColor(item.color)
-                            .frame(height: item.height)
-                    }))
-                    .tag(item.id)
+                DLCell(using: .header("Header"))
+                    .tag("header")
+                    .accessories([.outlineDisclosure()])
+                
+                DLCell {
+                    DLText("B")
                 }
+                .tag("B")
+                .child(of: "header")
+                .accessories([.outlineDisclosure()])
+                
+                DLCell {
+                    DLText("B1")
+                }
+                .tag("B1")
+                .child(of: "B")
+                
+                DLCell {
+                    DLText("A")
+                }
+                .tag("A")
+                .child(of: "header")
+                .accessories([.outlineDisclosure()])
+                
+                DLCell {
+                    DLText("A1")
+                }
+                .tag("A1")
+                .child(of: "A")
+                .accessories([.outlineDisclosure()])
+                
+                DLCell {
+                    DLText("A11")
+                }
+                .tag("A11")
+                .child(of: "A1")
+                .accessories([.outlineDisclosure()])
+                
+                DLCell {
+                    DLText("A111")
+                }
+                .tag("A111")
+                .child(of: "A11")
             }
             .tag(0)
+            .firstCellAsHeader()
         }
     }
 }
