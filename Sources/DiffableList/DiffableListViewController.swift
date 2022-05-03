@@ -78,15 +78,6 @@ open class DiffableListViewController: UIViewController {
         }
     }
     
-    public func cellExpanded(_ identifier: ItemIdentifier?) -> Bool {
-        guard let identifier = identifier else {
-            return true
-        }
-        
-        return !collapsedItemIdentifiers.contains(identifier) &&
-        !collapsedItemIdentifiers.contains(identifier.hashValue.description)
-    }
-    
     public func collapseItem(_ identifier: ItemIdentifier) {
         collapsedItemIdentifiers.insert(identifier)
     }
@@ -127,6 +118,15 @@ private extension DiffableListViewController {
         }
         
         reload(applyingSnapshot: false)
+    }
+    
+    func cellExpanded(_ identifier: ItemIdentifier?) -> Bool {
+        guard let identifier = identifier else {
+            return true
+        }
+        
+        return !collapsedItemIdentifiers.contains(identifier) &&
+        !collapsedItemIdentifiers.contains(identifier.hashValue.description)
     }
     
     var filteredList: DLList {
