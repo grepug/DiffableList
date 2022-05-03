@@ -131,10 +131,21 @@ private extension DiffableListViewController {
     
     var filteredList: DLList {
         let sections = list.sections.map { section -> DLSection in
+            var collapsedParentIds = Set<ItemIdentifier>()
+            
             let cells = section.cells.compactMap { cell -> CellConvertible? in
+                if let parentId = cell.parentId,
+                   collapsedParentIds.contains(parentId) {
+                    collapsedParentIds.insert(cell.id)
+                    
+                    return nil
+                }
+                
                 if cellExpanded(cell.parentId) {
                     return cell
                 }
+                
+                collapsedParentIds.insert(cell.id)
                 
                 return nil
             }
