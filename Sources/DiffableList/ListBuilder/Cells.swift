@@ -14,6 +14,7 @@ public protocol CellConfigurationConvertible {
 
 public protocol CellConvertible {
     var id: ItemIdentifier { set get }
+    var itemId: UUID? { set get }
     var parentId: ItemIdentifier? { get set }
     var configuration: UIContentConfiguration { get }
     var name: String? { get set }
@@ -40,8 +41,8 @@ public struct DLCell: CellConvertible {
     public var parentId: ItemIdentifier?
     public var configuration: UIContentConfiguration
     public var name: String?
+    public var itemId: UUID?
     
-    var storedItemId: UUID?
     var storedBackgroundConfiguration: UIBackgroundConfiguration?
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory] = []
@@ -151,7 +152,7 @@ public struct DLCell: CellConvertible {
     
     public func itemId(_ id: UUID) -> Self {
         var me = self
-        me.storedItemId = id
+        me.itemId = id
         return me
     }
 }
@@ -291,7 +292,12 @@ extension Array: CellConvertible where Element == CellConvertible {
     
     public var configuration: UIContentConfiguration {
         get { UIListContentConfiguration.cell() }
-        set { }
+        set {}
+    }
+    
+    public var itemId: UUID? {
+        get { nil }
+        set {}
     }
 }
 
