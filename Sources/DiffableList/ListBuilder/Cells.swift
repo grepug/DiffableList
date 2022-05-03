@@ -14,7 +14,8 @@ public protocol CellConfigurationConvertible {
 
 public protocol CellConvertible {
     var id: ItemIdentifier { set get }
-    var itemId: UUID? { set get }
+    var itemId: UUID? { get set }
+    var itemTitle: String? { get set }
     var parentId: ItemIdentifier? { get set }
     var configuration: UIContentConfiguration { get }
     var name: String? { get set }
@@ -42,6 +43,7 @@ public struct DLCell: CellConvertible {
     public var configuration: UIContentConfiguration
     public var name: String?
     public var itemId: UUID?
+    public var itemTitle: String?
     
     var storedBackgroundConfiguration: UIBackgroundConfiguration?
     var storedContextMenu: UIContextMenuConfiguration?
@@ -155,6 +157,12 @@ public struct DLCell: CellConvertible {
         me.itemId = id
         return me
     }
+    
+    public func itemTitle(_ title: String) -> Self {
+        var me = self
+        me.itemTitle = title
+        return me
+    }
 }
 
 public struct DLText: Hashable, CellConfigurationConvertible {
@@ -266,6 +274,11 @@ public struct DLImage: CellConfigurationConvertible {
 }
 
 extension Array: CellConvertible where Element == CellConvertible {
+    public var itemTitle: String? {
+        get { nil }
+        set {}
+    }
+    
     public var name: String? {
         get { first?.name ?? "" }
         set {}
