@@ -152,13 +152,13 @@ public struct DLCell: CellConvertible {
         return me
     }
     
-    public func itemId(_ id: UUID) -> Self {
+    public func itemId(_ id: UUID?) -> Self {
         var me = self
         me.itemId = id
         return me
     }
     
-    public func itemTitle(_ title: String) -> Self {
+    public func itemTitle(_ title: String?) -> Self {
         var me = self
         me.itemTitle = title
         return me
