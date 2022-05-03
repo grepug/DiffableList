@@ -41,6 +41,7 @@ public struct DLCell: CellConvertible {
     public var configuration: UIContentConfiguration
     public var name: String?
     
+    var storedItemId: UUID?
     var storedBackgroundConfiguration: UIBackgroundConfiguration?
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory] = []
@@ -145,6 +146,12 @@ public struct DLCell: CellConvertible {
     public func name(_ name: String) -> Self {
         var me = self
         me.name = name
+        return me
+    }
+    
+    public func itemId(_ id: UUID) -> Self {
+        var me = self
+        me.storedItemId = id
         return me
     }
 }
