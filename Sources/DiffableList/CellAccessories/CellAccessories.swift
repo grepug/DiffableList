@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UICellAccessory {
+public extension UICellAccessory {
     static func menuButton(menu: UIMenu, image: UIImage? = .init(systemName: "ellipsis")) -> UICellAccessory {
         let button = UIButton()
         button.setImage(image, for: .normal)
