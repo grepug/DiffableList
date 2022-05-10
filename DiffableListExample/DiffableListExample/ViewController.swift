@@ -57,6 +57,8 @@ class ViewController: DiffableListViewController {
                 
                 DLCell {
                     DLText("A")
+                    DLText("A".hashValue.description)
+                        .secondary()
                 }
                 .tag("A")
                 .child(of: "header")
@@ -64,6 +66,8 @@ class ViewController: DiffableListViewController {
                 
                 DLCell {
                     DLText("A1")
+                    DLText("A1".hashValue.description)
+                        .secondary()
                 }
                 .tag("A1")
                 .child(of: "A")
@@ -71,6 +75,8 @@ class ViewController: DiffableListViewController {
                 
                 DLCell {
                     DLText("A11")
+                    DLText("A11".hashValue.description)
+                        .secondary()
                 }
                 .tag("A11")
                 .child(of: "A1")
@@ -78,6 +84,8 @@ class ViewController: DiffableListViewController {
                 
                 DLCell {
                     DLText("A111")
+                    DLText("A111".hashValue.description)
+                        .secondary()
                 }
                 .tag("A111")
                 .child(of: "A11")

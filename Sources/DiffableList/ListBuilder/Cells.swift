@@ -324,7 +324,7 @@ public extension UIListContentConfiguration {
         if #available(iOS 15.0, *) {
             return .prominentInsetGroupedHeader()
         } else {
-            return .groupedHeader()
+            return .sidebarHeader()
         }
     }
 }
