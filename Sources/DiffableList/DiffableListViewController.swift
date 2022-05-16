@@ -89,6 +89,8 @@ open class DiffableListViewController: UIViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         
+        listView.backgroundColor = .systemGroupedBackground
+        
         dataSource.sectionSnapshotHandlers.willExpandItem = { [unowned self] identifier in
             self.insertOrRemoveCollapsedIdentifier(identifier)
         }
