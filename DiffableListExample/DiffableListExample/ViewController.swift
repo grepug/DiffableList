@@ -39,7 +39,7 @@ class ViewController: DiffableListViewController {
         "hello"
     }
     
-    override var collapseAllByDefault: Bool { true }
+    override var collapseAllByDefaultAndExcludedIds: Set<ItemIdentifier>? { [] }
     
     override var list: DLList {
         DLList { [unowned self] in

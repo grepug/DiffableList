@@ -26,8 +26,9 @@ open class DiffableListViewController: UIViewController {
         
         Logger.vc.info("initial cachedIdentifers, []")
         
-        if collapseAllByDefault {
-            let ids = allParentIdentifiers
+        if let collapseAllByDefaultAndExcludedIds = collapseAllByDefaultAndExcludedIds {
+            var ids = allParentIdentifiers
+            ids = ids.subtracting(collapseAllByDefaultAndExcludedIds)
             
             Logger.vc.info("initial parentIds cachedIdentifers, \(ids)")
             
@@ -46,7 +47,7 @@ open class DiffableListViewController: UIViewController {
     }
     
     open var cachedCollapsedItemIdentifiersKey: String? { nil }
-    open var collapseAllByDefault: Bool { false }
+    open var collapseAllByDefaultAndExcludedIds: Set<ItemIdentifier>? { nil }
     
     open func makeListView() -> DiffableListView {
         let listView = DiffableListView(frame: view.bounds)
