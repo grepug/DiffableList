@@ -15,3 +15,17 @@ public typealias ItemIdentifier = String
 //public typealias DLText = Text
 //public typealias DLCell = Cell
 //public typealias DLSection = Section
+
+public extension Hashable {
+    var itemIdentifier: String {
+        if let string = self as? String {
+            return string
+        }
+        
+        return hashValue.description
+    }
+    
+    var sectionIdentifer: String {
+        itemIdentifier
+    }
+}

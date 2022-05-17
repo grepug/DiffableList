@@ -101,7 +101,7 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
 
 public extension DiffableListView {
     func indexPath<T: Hashable>(forItemIdentifier id: T) -> IndexPath? {
-        diffableDataSource.indexPath(for: id.hashValue.description)
+        diffableDataSource.indexPath(for: id.itemIdentifier)
     }
     
     func forceReloadData() {

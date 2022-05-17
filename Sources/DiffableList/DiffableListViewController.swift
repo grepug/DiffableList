@@ -98,7 +98,7 @@ open class DiffableListViewController: UIViewController {
     }
     
     public func collapseItem<T: Hashable>(withTag tag: T) {
-        collapsedItemIdentifiers.insert(tag.hashValue.description)
+        collapsedItemIdentifiers.insert(tag.itemIdentifier)
     }
     
     open override func viewDidLoad() {
@@ -143,7 +143,7 @@ private extension DiffableListViewController {
         }
         
         return !collapsedItemIdentifiers.contains(identifier) &&
-        !collapsedItemIdentifiers.contains(identifier.hashValue.description)
+        !collapsedItemIdentifiers.contains(identifier.itemIdentifier)
     }
     
     var filteredList: DLList {

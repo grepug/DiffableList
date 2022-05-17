@@ -36,7 +36,7 @@ public struct DLSection: SectionConvertible, Identifiable {
     
     public func tag<ID: Hashable>(_ id: ID) -> Self {
         var me = self
-        me.id = id.hashValue.description
+        me.id = id.sectionIdentifer
         return me
     }
     

@@ -26,24 +26,14 @@ public protocol CellConvertible {
 public extension CellConvertible {
     func tag<ID: Hashable>(_ id: ID) -> Self {
         var me = self
-
-        if let id = id as? String {
-            me.id = id
-        } else {
-            me.id = id.hashValue.description
-        }
+        me.id = id.itemIdentifier
         
         return me
     }
     
     func child<ID: Hashable>(of id: ID) -> Self {
         var me = self
-        
-        if let id = id as? String {
-            me.parentId = id
-        } else {
-            me.parentId = id.hashValue.description
-        }
+        me.parentId = id.itemIdentifier
 
         return me
     }
