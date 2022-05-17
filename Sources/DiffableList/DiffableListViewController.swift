@@ -6,6 +6,11 @@
 //
 
 import UIKit
+import os
+
+fileprivate extension Logger {
+    static let vc = Logger(subsystem: "diffable.list", category: "diffable.list.DiffableListViewController")
+}
 
 open class DiffableListViewController: UIViewController {
     lazy public var listView = makeListView()
@@ -13,19 +18,35 @@ open class DiffableListViewController: UIViewController {
     lazy var collapsedItemIdentifiers: Set<ItemIdentifier> = {
         if let cacheKey = cachedCollapsedItemIdentifiersKey,
             let cachedIdentifiers = UserDefaults.standard.stringArray(forKey: cacheKey) {
+            
+            Logger.vc.info("cachedIdentifiers, \(cachedIdentifiers)")
+            
             return Set(cachedIdentifiers)
+        }
+        
+        Logger.vc.info("initial cachedIdentifers, []")
+        
+        if collapseAllByDefault {
+            let ids = allParentIdentifiers
+            
+            Logger.vc.info("initial parentIds cachedIdentifers, \(ids)")
+            
+            return ids
         }
         
         return []
     }() {
         didSet {
             if let cacheKey = cachedCollapsedItemIdentifiersKey {
+                Logger.vc.info("did set cachedIdentifiers, \(self.collapsedItemIdentifiers)")
+                
                 UserDefaults.standard.set(Array(collapsedItemIdentifiers), forKey: cacheKey)
             }
         }
     }
     
     open var cachedCollapsedItemIdentifiersKey: String? { nil }
+    open var collapseAllByDefault: Bool { false }
     
     open func makeListView() -> DiffableListView {
         let listView = DiffableListView(frame: view.bounds)
@@ -39,6 +60,8 @@ open class DiffableListViewController: UIViewController {
             listView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             listView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        
+        Logger.vc.info("did make list view")
         
         return listView
     }
@@ -144,6 +167,16 @@ private extension DiffableListViewController {
         
         return !collapsedItemIdentifiers.contains(identifier) &&
         !collapsedItemIdentifiers.contains(identifier.itemIdentifier)
+    }
+    
+    var allParentIdentifiers: Set<ItemIdentifier> {
+        let ids = list.sections.flatMap { section in
+            section.cells.compactMap { cell in
+                cell.parentId
+            }
+        }
+        
+        return Set(ids)
     }
     
     var filteredList: DLList {

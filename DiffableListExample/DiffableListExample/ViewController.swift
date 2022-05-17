@@ -35,6 +35,12 @@ class ViewController: DiffableListViewController {
         reload(animating: false)
     }
     
+    override var cachedCollapsedItemIdentifiersKey: String? {
+        "hello"
+    }
+    
+    override var collapseAllByDefault: Bool { true }
+    
     override var list: DLList {
         DLList { [unowned self] in
             DLSection {
