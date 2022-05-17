@@ -10,7 +10,22 @@ import UIKit
 open class DiffableListViewController: UIViewController {
     lazy public var listView = makeListView()
     
-    var collapsedItemIdentifiers: Set<ItemIdentifier> = []
+    lazy var collapsedItemIdentifiers: Set<ItemIdentifier> = {
+        if let cacheKey = cachedCollapsedItemIdentifiersKey,
+            let cachedIdentifiers = UserDefaults.standard.stringArray(forKey: cacheKey) {
+            return Set(cachedIdentifiers)
+        }
+        
+        return []
+    }() {
+        didSet {
+            if let cacheKey = cachedCollapsedItemIdentifiersKey {
+                UserDefaults.standard.set(Array(collapsedItemIdentifiers), forKey: cacheKey)
+            }
+        }
+    }
+    
+    open var cachedCollapsedItemIdentifiersKey: String? { nil }
     
     open func makeListView() -> DiffableListView {
         let listView = DiffableListView(frame: view.bounds)
