@@ -38,7 +38,13 @@ public extension CellConvertible {
     
     func child<ID: Hashable>(of id: ID) -> Self {
         var me = self
-        me.parentId = id.hashValue.description
+        
+        if let id = id as? String {
+            me.parentId = id
+        } else {
+            me.parentId = id.hashValue.description
+        }
+
         return me
     }
 }
