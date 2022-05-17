@@ -26,7 +26,13 @@ public protocol CellConvertible {
 public extension CellConvertible {
     func tag<ID: Hashable>(_ id: ID) -> Self {
         var me = self
-        me.id = id.hashValue.description
+
+        if let id = id as? String {
+            me.id = id
+        } else {
+            me.id = id.hashValue.description
+        }
+        
         return me
     }
     
