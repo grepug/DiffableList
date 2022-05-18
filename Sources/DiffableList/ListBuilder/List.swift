@@ -10,6 +10,7 @@ import UIKit
 public struct DLList {
     public var sections: [DLSection]
     
+    var storedAppearance: UICollectionLayoutListConfiguration.Appearance = .insetGrouped
     var storedOnTapAction: ((IndexPath) -> Void)?
     var storedDefaultBackgroundConfiguration: UIBackgroundConfiguration?
     var storedHideBottomSeparator: Bool = false
@@ -47,6 +48,12 @@ public struct DLList {
     public func didRecorder(_ handler: @escaping (NSDiffableDataSourceTransaction<SectionIdentifier, ItemIdentifier>) -> Void) -> Self {
         var me = self
         me.storedDidRecorderHandler = handler
+        return me
+    }
+    
+    public func appearance(_ appearance: UICollectionLayoutListConfiguration.Appearance) -> Self {
+        var me = self
+        me.storedAppearance = appearance
         return me
     }
 }

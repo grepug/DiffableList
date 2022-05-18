@@ -43,7 +43,7 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
                 return .empty
             }
             
-            var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+            var listConfig = UICollectionLayoutListConfiguration(appearance: self.content.storedAppearance)
             
             if #available(iOS 14.5, *), self.content.storedHideBottomSeparator {
                 listConfig.itemSeparatorHandler = { indexPath, config in
