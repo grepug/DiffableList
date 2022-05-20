@@ -71,7 +71,16 @@ open class DiffableListViewController: UIViewController {
         DLList {}
     }
     
+    open var canReload: Bool {
+        true
+    }
+    
     open func reload(applyingSnapshot: Bool = true, animating: Bool = true) {
+        guard canReload else {
+            Logger.vc.log("reload denied!")
+            return
+        }
+        
         let cachedCollapsedItemIdentifiers = collapsedItemIdentifiers
         
         if applyingSnapshot {
