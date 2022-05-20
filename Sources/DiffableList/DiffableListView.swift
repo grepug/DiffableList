@@ -252,12 +252,16 @@ extension DiffableListView {
     }
     
     public func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveOfItemFromOriginalIndexPath originalIndexPath: IndexPath, atCurrentIndexPath currentIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+        /// 如果第一个 cell 是 header，则不允许
+        if proposedIndexPath.item == 0 && content.sections[proposedIndexPath.section].isFirstCellAsHeader {
+            return originalIndexPath
+        }
 
-        if originalIndexPath.section == proposedIndexPath.section {
-            return proposedIndexPath
+        if originalIndexPath.section != proposedIndexPath.section {
+            return originalIndexPath
         }
         
-        return originalIndexPath
+        return proposedIndexPath
     }
     
     func makeCellConfig() -> UICollectionView.CellRegistration<UICollectionViewListCell, ItemIdentifier> {
