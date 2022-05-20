@@ -176,13 +176,34 @@ extension DiffableListView {
         
         for (section, snapshot) in snapshots {
             let isFirstAppling = !prevAppliedSectionIds.contains(section)
-            let isSnapshotChanged = diffableDataSource.snapshot(for: section).items != snapshot.items
+            let prevSnapshot = diffableDataSource.snapshot(for: section)
+            let isSnapshotChanged = snapshotsAreChanged(prev: prevSnapshot, current: snapshot)
             
             if isFirstAppling || isSnapshotChanged {
                 currentApplyingSection = section
                 diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating)
             }
         }
+    }
+    
+    typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<ItemIdentifier>
+    
+    func snapshotsAreChanged(prev snapshotA: SectionSnapshot, current snapshotB: SectionSnapshot) -> Bool {
+        if snapshotA.items.count != snapshotB.items.count {
+            return true
+        }
+        
+        for item in snapshotA.items {
+            if !snapshotB.items.contains(item) {
+                return true
+            }
+            
+            if snapshotA.isExpanded(item) != snapshotB.isExpanded(item) {
+                return true
+            }
+        }
+        
+        return false
     }
     
     func makeDataSource() -> UICollectionViewDiffableDataSource<SectionIdentifier, ItemIdentifier> {
@@ -261,7 +282,7 @@ extension DiffableListView {
             }
             
             if let theCell = cellConvertible as? DLCell {
-                cell.accessories = theCell.storedAccessories
+                cell.accessories = theCell.storedAccessories.compactMap { $0 }
                 
                 if let backgroundConfiguration = theCell.storedBackgroundConfiguration {
                     cell.backgroundConfiguration = backgroundConfiguration

@@ -49,7 +49,7 @@ public struct DLCell: CellConvertible {
     
     var storedBackgroundConfiguration: UIBackgroundConfiguration?
     var storedContextMenu: UIContextMenuConfiguration?
-    var storedAccessories: [UICellAccessory] = []
+    var storedAccessories: [UICellAccessory?] = []
     var storedDidSelectedAction: ((IndexPath) -> Void)?
     var storedLeadingSwipeActions: [UIContextualAction]?
     var storedTrailingSwipeActions: [UIContextualAction]?
@@ -109,7 +109,7 @@ public struct DLCell: CellConvertible {
         return me
     }
     
-    public func accessories(_ items: [UICellAccessory]) -> Self {
+    public func accessories(_ items: [UICellAccessory?]) -> Self {
         var cell = self
         cell.storedAccessories = items
         
