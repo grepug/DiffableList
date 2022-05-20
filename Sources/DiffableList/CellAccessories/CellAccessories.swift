@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 public extension UICellAccessory {
     static func menuButton(menu: UIMenu, image: UIImage? = .init(systemName: "ellipsis")) -> UICellAccessory {
@@ -18,6 +19,24 @@ public extension UICellAccessory {
         return .customView(configuration: .init(customView: button,
                                                 placement: .trailing(displayed: .always),
                                                 maintainsFixedSize: true))
+    }
+    
+    static func labelButton(title: String,
+                            color: UIColor = UIColor(Color.accentColor),
+                            font: UIFont = .preferredFont(forTextStyle: .subheadline),
+                            action: @escaping (UIButton) -> Void) -> UICellAccessory {
+        let button = UIButton()
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(color, for: .normal)
+        button.titleLabel?.font = font
+        button.addAction(.init { _ in
+            action(button)
+            button.sizeToFit()
+        }, for: .touchUpInside)
+        
+        return .customView(configuration: .init(customView: button,
+                                             placement: .trailing(displayed: .always),
+                                             tintColor: UIColor(Color.accentColor)))
     }
     
     static func imageButton(image: UIImage, tintColor: UIColor? = nil, action: @escaping () -> Void) -> UICellAccessory {
