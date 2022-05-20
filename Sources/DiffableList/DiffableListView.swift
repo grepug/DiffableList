@@ -238,6 +238,10 @@ extension DiffableListView {
     }
     
     func setupReorderHandler() {
+        guard parentViewController?.isEditing == true else {
+            return
+        }
+        
         if let canReorder = content.storedCanReorderHandler {
             diffableDataSource.reorderingHandlers.canReorderItem = { [unowned self] identifier in
                 let indexPath = self.diffableDataSource.indexPath(for: identifier)

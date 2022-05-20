@@ -23,6 +23,14 @@ public extension UIView {
     }
 }
 
+public extension UIView {
+    var parentViewController: UIViewController? {
+        sequence(first: self) { $0.next }
+            .first(where: { $0 is UIViewController })
+            .flatMap { $0 as? UIViewController }
+    }
+}
+
 public extension UITextView {
     func addDoneButton() {
         inputAccessoryView = .makeDoneButton(inputView: self)
