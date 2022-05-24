@@ -189,7 +189,7 @@ extension DiffableListView {
     typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<ItemIdentifier>
     
     func snapshotsAreChanged(prev snapshotA: SectionSnapshot, current snapshotB: SectionSnapshot) -> Bool {
-        if snapshotA.items.count != snapshotB.items.count {
+        if snapshotA.items != snapshotB.items {
             return true
         }
         
