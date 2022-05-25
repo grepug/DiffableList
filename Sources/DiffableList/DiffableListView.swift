@@ -363,6 +363,10 @@ extension DiffableListView {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cellConvertible = cellConvertible(at: indexPath)!
         
+        if let firstResponder = firstResponder {
+            firstResponder.resignFirstResponder()
+        }
+        
         if let cell = cellConvertible as? DLCell {
             cell.storedDidSelectedAction?(indexPath)
         }
