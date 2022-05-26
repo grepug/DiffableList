@@ -35,6 +35,20 @@ class OrthogonalScrollingViewController: DiffableListViewController {
                 .backgroundConfiguration(.clear())
             }
             .tag("0")
+            .layout { env in
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(167),
+                                                      heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = .init(top: 0, leading: 8, bottom: 0, trailing: 8)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.94),
+                                                       heightDimension: .absolute(160))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .paging
+                
+                section.contentInsets = .init(top: 0, leading: 8, bottom: 8, trailing: 8)
+                return section
+            }
             
             DLSection {
                 DLCell(using: .swiftUI(movingTo: self, content: {
@@ -96,6 +110,14 @@ class OrthogonalScrollingViewController: DiffableListViewController {
                 }
                 .padding(.leading)
             }))
+            
+            DLSection {
+                DLCell {
+                    DLText("hi")
+                }
+                .tag("haha")
+            }
+            .tag("3")
         }
     }
     
@@ -104,29 +126,13 @@ class OrthogonalScrollingViewController: DiffableListViewController {
         
         title = "复盘"
         reload(animating: false)
-    }
-    
-    override var sectionProvider: UICollectionViewCompositionalLayoutSectionProvider? {
-        { [unowned self] in sectionLayoutProvider(sectionIndex: $0, env: $1) }
+        listView.customSectionProvider = { [unowned self] in sectionLayoutProvider(sectionIndex: $0, env: $1) }
     }
 }
 
 extension OrthogonalScrollingViewController {
     func sectionLayoutProvider(sectionIndex: Int, env: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?  {
         switch sectionIndex {
-        case 0:
-            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(167),
-                                                  heightDimension: .fractionalHeight(1))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = .init(top: 0, leading: 8, bottom: 0, trailing: 8)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.94),
-                                                   heightDimension: .absolute(160))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
-            let section = NSCollectionLayoutSection(group: group)
-            section.orthogonalScrollingBehavior = .paging
-            
-            section.contentInsets = .init(top: 0, leading: 8, bottom: 8, trailing: 8)
-            return section
         case 1:
             let titleItemSize = NSCollectionLayoutSize(widthDimension: .absolute(167),
                                                        heightDimension: .fractionalHeight(0.2))
@@ -147,9 +153,9 @@ extension OrthogonalScrollingViewController {
             
             return section
             
-        case 2, 3:
+        case 2:
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                         heightDimension: .fractionalHeight(0.8))
+                                                         heightDimension: .fractionalHeight(1))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.94),
@@ -159,7 +165,7 @@ extension OrthogonalScrollingViewController {
             
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .paging
-            section.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+            section.contentInsets = .init(top: 8, leading: 8, bottom: 0, trailing: 8)
             
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                     heightDimension: .absolute(44))

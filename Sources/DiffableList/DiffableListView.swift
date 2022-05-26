@@ -46,6 +46,10 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
             
             let section = content.sections[sectionIndex]
             
+            if let section = section.storedLayout?(env) {
+                return section
+            }
+            
             guard !section.cells.isEmpty else {
                 return .empty
             }

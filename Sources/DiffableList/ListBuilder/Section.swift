@@ -26,6 +26,7 @@ public struct DLSection: SectionConvertible, Identifiable {
     var headerContentConfiguration: DLContentConfiguration?
     var footerText: String?
     var storedHeaderTopPadding: CGFloat?
+    var storedLayout: ((NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection)?
     
     public init(@ListBuilder cells: @escaping () -> [CellConvertible]) {
         self.cells = cells()
@@ -68,6 +69,12 @@ public struct DLSection: SectionConvertible, Identifiable {
     public func headerTopPadding(_ top: CGFloat) -> Self {
         var me = self
         me.storedHeaderTopPadding = top
+        return me
+    }
+    
+    public func layout(_ layout: @escaping (NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection) -> Self {
+        var me = self
+        me.storedLayout = layout
         return me
     }
 }
