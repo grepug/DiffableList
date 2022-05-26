@@ -13,8 +13,9 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     var prevContent: DLList = DLList {}
     var currentApplyingSection: SectionIdentifier?
     
-    unowned var sectionProviderWrapper: SectionProviderWrapper
+    private unowned var sectionProviderWrapper: SectionProviderWrapper
     private var appliedSnapshotSectionIds = Set<SectionIdentifier>()
+    public var customSectionProvider: UICollectionViewCompositionalLayoutSectionProvider?
     
     public init(frame: CGRect) {
         let sectionProviderWrapper = SectionProviderWrapper()
@@ -37,15 +38,21 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     
     func setupLayout() {
         sectionProviderWrapper.sectionProvider = { [unowned self] sectionIndex, env in
-            let section = self.content.sections[sectionIndex]
+            if let customSectionProvider = customSectionProvider {
+                if let section = customSectionProvider(sectionIndex, env) {
+                    return section
+                }
+            }
+            
+            let section = content.sections[sectionIndex]
             
             guard !section.cells.isEmpty else {
                 return .empty
             }
             
-            var listConfig = UICollectionLayoutListConfiguration(appearance: self.content.storedAppearance)
+            var listConfig = UICollectionLayoutListConfiguration(appearance: content.storedAppearance)
             
-            if #available(iOS 14.5, *), self.content.storedHideBottomSeparator {
+            if #available(iOS 14.5, *), content.storedHideBottomSeparator {
                 listConfig.itemSeparatorHandler = { indexPath, config in
                     var config = config
                     config.bottomSeparatorVisibility = .hidden
@@ -68,12 +75,10 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
                 if let padding = section.storedHeaderTopPadding {
                     listConfig.headerTopPadding = padding
                 }
-            } else {
-                
             }
             
             listConfig.trailingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
-                let cellConvertible = self.cellConvertible(at: indexPath)
+                let cellConvertible = cellConvertible(at: indexPath)
                 
                 if let cell = cellConvertible as? DLCell {
                     return .init(actions: cell.storedTrailingSwipeActions ?? [])
@@ -83,7 +88,7 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
             }
             
             listConfig.leadingSwipeActionsConfigurationProvider = { [unowned self] indexPath in
-                let cellConvertible = self.cellConvertible(at: indexPath)
+                let cellConvertible = cellConvertible(at: indexPath)
                 
                 if let cell = cellConvertible as? DLCell {
                     return .init(actions: cell.storedLeadingSwipeActions ?? [])
@@ -219,18 +224,12 @@ extension DiffableListView {
         let footerLabelConfig = makeFooterLabelSupplementaryViewConfig()
         let headerConfig = makeHeaderLabelSupplementaryViewConfig2()
         
-        diffableDataSource.supplementaryViewProvider = { [unowned self] collectionView, elementKind, indexPath in
-            let section = self.section(at: indexPath)
-                
+        diffableDataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
             switch elementKind {
             case UICollectionView.elementKindSectionHeader:
-//                if section.headerText != nil {
-                    return collectionView.dequeueConfiguredReusableSupplementary(using: headerLabelConfig, for: indexPath)
-//                }
+                return collectionView.dequeueConfiguredReusableSupplementary(using: headerLabelConfig, for: indexPath)
             case UICollectionView.elementKindSectionFooter:
-//                if section.footerText != nil {
-                    return collectionView.dequeueConfiguredReusableSupplementary(using: footerLabelConfig, for: indexPath)
-//                }
+                return collectionView.dequeueConfiguredReusableSupplementary(using: footerLabelConfig, for: indexPath)
             case DiffableListView.reusableContentViewKind:
                 return collectionView.dequeueConfiguredReusableSupplementary(using: headerConfig, for: indexPath)
             default: break
