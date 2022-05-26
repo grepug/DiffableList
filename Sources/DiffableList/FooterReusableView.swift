@@ -33,7 +33,33 @@ class LabelResuableView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func config(text: String, uppercased: Bool = false) {
+    func config(text: String,
+                uppercased: Bool = false,
+                labelConfig: ReusableLabelConfigration? = nil) {
         label.text = uppercased ? text.uppercased() : text
+        
+        if let config = labelConfig {
+            config.configLabel(label)
+        }
+    }
+}
+
+public struct ReusableLabelConfigration {
+    public init(font: UIFont? = nil, color: UIColor? = nil) {
+        self.font = font
+        self.color = color
+    }
+    
+    var font: UIFont?
+    var color: UIColor?
+    
+    func configLabel(_ label: UILabel) {
+        if let font = font {
+            label.font = font
+        }
+        
+        if let color = color {
+            label.textColor = color
+        }
     }
 }

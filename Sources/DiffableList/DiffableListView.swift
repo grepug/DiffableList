@@ -217,19 +217,22 @@ extension DiffableListView {
     func setupSupplementaryViewProvider() {
         let headerLabelConfig = makeHeaderLabelSupplementaryViewConfig()
         let footerLabelConfig = makeFooterLabelSupplementaryViewConfig()
+        let headerConfig = makeHeaderLabelSupplementaryViewConfig2()
         
         diffableDataSource.supplementaryViewProvider = { [unowned self] collectionView, elementKind, indexPath in
             let section = self.section(at: indexPath)
                 
             switch elementKind {
             case UICollectionView.elementKindSectionHeader:
-                if section.headerText != nil {
+//                if section.headerText != nil {
                     return collectionView.dequeueConfiguredReusableSupplementary(using: headerLabelConfig, for: indexPath)
-                }
+//                }
             case UICollectionView.elementKindSectionFooter:
-                if section.footerText != nil {
+//                if section.footerText != nil {
                     return collectionView.dequeueConfiguredReusableSupplementary(using: footerLabelConfig, for: indexPath)
-                }
+//                }
+            case DiffableListView.reusableContentViewKind:
+                return collectionView.dequeueConfiguredReusableSupplementary(using: headerConfig, for: indexPath)
             default: break
             }
             
@@ -310,6 +313,14 @@ extension DiffableListView {
             let section = self.section(at: indexPath)
             
             supplementaryView.config(text: section.headerText!)
+        }
+    }
+    
+    func makeHeaderLabelSupplementaryViewConfig2() -> UICollectionView.SupplementaryRegistration<ReusableContentView> {
+        .init(elementKind: DiffableListView.reusableContentViewKind) { [unowned self] supplementaryView, elementKind, indexPath in
+            let section = section(at: indexPath)
+            
+            supplementaryView.contentConfiguration = section.headerContentConfiguration?.contentConfiguration
         }
     }
     

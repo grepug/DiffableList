@@ -40,8 +40,9 @@ class SwiftUIWrapperCellConfigurationView<Content: View>: UIView & UIContentView
     
     init(configuration: Configuration<Content>) {
         self.configuration = configuration
-        
         super.init(frame: .zero)
+        
+        applyConfiguration()
     }
     
     deinit {

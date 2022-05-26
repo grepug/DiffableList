@@ -23,6 +23,7 @@ public struct DLSection: SectionConvertible, Identifiable {
     public var cells: [CellConvertible]
     var isFirstCellAsHeader: Bool = false
     var headerText: String?
+    var headerContentConfiguration: DLContentConfiguration?
     var footerText: String?
     var storedHeaderTopPadding: CGFloat?
     
@@ -49,6 +50,12 @@ public struct DLSection: SectionConvertible, Identifiable {
     public func header(_ text: String) -> Self {
         var me = self
         me.headerText = text
+        return me
+    }
+    
+    public func header(using contentConfiguration: DLContentConfiguration) -> Self {
+        var me = self
+        me.headerContentConfiguration = contentConfiguration
         return me
     }
     
