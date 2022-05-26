@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A4EA9B6283E36560000E957 /* OrthogonalScrollingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EA9B5283E36560000E957 /* OrthogonalScrollingViewController.swift */; };
+		2A4EA9B8283E36600000E957 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EA9B7283E36600000E957 /* EntryViewController.swift */; };
+		2A93182B283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A93182A283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift */; };
 		2ABAD2C427E0685700C9C47E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABAD2C327E0685700C9C47E /* AppDelegate.swift */; };
 		2ABAD2C627E0685700C9C47E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABAD2C527E0685700C9C47E /* SceneDelegate.swift */; };
-		2ABAD2C827E0685700C9C47E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABAD2C727E0685700C9C47E /* ViewController.swift */; };
+		2ABAD2C827E0685700C9C47E /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABAD2C727E0685700C9C47E /* ListViewController.swift */; };
 		2ABAD2CB27E0685700C9C47E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2ABAD2C927E0685700C9C47E /* Main.storyboard */; };
 		2ABAD2CD27E0685900C9C47E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2ABAD2CC27E0685900C9C47E /* Assets.xcassets */; };
 		2ABAD2D027E0685900C9C47E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2ABAD2CE27E0685900C9C47E /* LaunchScreen.storyboard */; };
@@ -18,10 +21,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2A4EA9B5283E36560000E957 /* OrthogonalScrollingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrthogonalScrollingViewController.swift; sourceTree = "<group>"; };
+		2A4EA9B7283E36600000E957 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
+		2A93182A283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrthogonalScrollingViewController+Sheet.swift"; sourceTree = "<group>"; };
 		2ABAD2C027E0685700C9C47E /* DiffableListExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiffableListExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2ABAD2C327E0685700C9C47E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2ABAD2C527E0685700C9C47E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2ABAD2C727E0685700C9C47E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2ABAD2C727E0685700C9C47E /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		2ABAD2CA27E0685700C9C47E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2ABAD2CC27E0685900C9C47E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2ABAD2CF27E0685900C9C47E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -42,6 +48,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A4EA9B4283E36350000E957 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2A4EA9B5283E36560000E957 /* OrthogonalScrollingViewController.swift */,
+				2A93182A283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift */,
+				2ABAD2C727E0685700C9C47E /* ListViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		2ABAD2B727E0685700C9C47E = {
 			isa = PBXGroup;
 			children = (
@@ -63,9 +79,10 @@
 		2ABAD2C227E0685700C9C47E /* DiffableListExample */ = {
 			isa = PBXGroup;
 			children = (
+				2A4EA9B4283E36350000E957 /* ViewControllers */,
 				2ABAD2C327E0685700C9C47E /* AppDelegate.swift */,
 				2ABAD2C527E0685700C9C47E /* SceneDelegate.swift */,
-				2ABAD2C727E0685700C9C47E /* ViewController.swift */,
+				2A4EA9B7283E36600000E957 /* EntryViewController.swift */,
 				2ABAD2C927E0685700C9C47E /* Main.storyboard */,
 				2ABAD2CC27E0685900C9C47E /* Assets.xcassets */,
 				2ABAD2CE27E0685900C9C47E /* LaunchScreen.storyboard */,
@@ -164,9 +181,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2ABAD2C827E0685700C9C47E /* ViewController.swift in Sources */,
+				2ABAD2C827E0685700C9C47E /* ListViewController.swift in Sources */,
 				2ABAD2C427E0685700C9C47E /* AppDelegate.swift in Sources */,
+				2A93182B283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift in Sources */,
+				2A4EA9B8283E36600000E957 /* EntryViewController.swift in Sources */,
 				2ABAD2C627E0685700C9C47E /* SceneDelegate.swift in Sources */,
+				2A4EA9B6283E36560000E957 /* OrthogonalScrollingViewController.swift in Sources */,
 				2ABAD2DD27E07BBC00C9C47E /* SwiftUIWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

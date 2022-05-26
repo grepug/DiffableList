@@ -16,7 +16,7 @@ struct Item {
     var height: CGFloat = 44
 }
 
-class ViewController: DiffableListViewController {
+class ListViewController: DiffableListViewController {
     var data: [Item] = [
         .init(value: "1", color: .red, height: 55),
         .init(value: "2", color: .green, height: 69),
@@ -42,7 +42,7 @@ class ViewController: DiffableListViewController {
     override var collapseAllByDefaultAndExcludedIds: Set<ItemIdentifier>? { [] }
     
     override var list: DLList {
-        DLList { [unowned self] in
+        DLList {
             DLSection {
                 DLCell(using: .header("Header"))
                     .tag("header")
