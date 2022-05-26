@@ -13,7 +13,7 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     var prevContent: DLList = DLList {}
     var currentApplyingSection: SectionIdentifier?
     
-    private unowned var sectionProviderWrapper: SectionProviderWrapper
+    unowned var sectionProviderWrapper: SectionProviderWrapper
     private var appliedSnapshotSectionIds = Set<SectionIdentifier>()
     
     public init(frame: CGRect) {

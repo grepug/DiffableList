@@ -48,10 +48,17 @@ open class DiffableListViewController: UIViewController {
     
     open var cachedCollapsedItemIdentifiersKey: String? { nil }
     open var collapseAllByDefaultAndExcludedIds: Set<ItemIdentifier>? { nil }
+    open var sectionProvider: UICollectionViewCompositionalLayoutSectionProvider? {
+        nil
+    }
     
     open func makeListView() -> DiffableListView {
         let listView = DiffableListView(frame: view.bounds)
         view.addSubview(listView)
+        
+        if let sectionProvider = sectionProvider {
+            listView.sectionProviderWrapper.sectionProvider = sectionProvider
+        }
         
         listView.translatesAutoresizingMaskIntoConstraints = false
         
