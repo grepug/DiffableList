@@ -26,7 +26,8 @@ public struct DLSection: SectionConvertible, Identifiable {
     var headerContentConfiguration: DLContentConfiguration?
     var footerText: String?
     var storedHeaderTopPadding: CGFloat?
-    var storedLayout: ((NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection)?
+    var storedLayout: ((NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?)?
+    var storedListBackgroundColor: UIColor?
     
     public init(@ListBuilder cells: @escaping () -> [CellConvertible]) {
         self.cells = cells()
@@ -72,9 +73,15 @@ public struct DLSection: SectionConvertible, Identifiable {
         return me
     }
     
-    public func layout(_ layout: @escaping (NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection) -> Self {
+    public func layout(_ layout: @escaping (NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?) -> Self {
         var me = self
         me.storedLayout = layout
+        return me
+    }
+    
+    public func listBackgroundColor(_ color: UIColor) -> Self {
+        var me = self
+        me.storedListBackgroundColor = color
         return me
     }
 }

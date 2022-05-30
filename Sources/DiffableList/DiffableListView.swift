@@ -75,6 +75,10 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
                 listConfig.footerMode = .supplementary
             }
             
+            if let listBgColor = section.storedListBackgroundColor {
+                listConfig.backgroundColor = listBgColor
+            }
+            
             if #available(iOS 15.0, *) {
                 if let padding = section.storedHeaderTopPadding {
                     listConfig.headerTopPadding = padding
