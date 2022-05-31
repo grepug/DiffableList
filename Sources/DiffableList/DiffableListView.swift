@@ -405,8 +405,16 @@ extension DiffableListView {
     public func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         let cellConvertible = cellConvertible(at: indexPath)
         
-        if let cell = cellConvertible as? DLCell, let disabled = cell.storedDisablingHighlight {
-            return !disabled
+        if let cell = cellConvertible as? DLCell {
+            if let disabled = cell.storedDisablingHighlight {
+                return !disabled
+            }
+            
+            if cell.storedDidSelectedAction != nil {
+                return true
+            }
+            
+            return false
         }
         
         return true
