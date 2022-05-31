@@ -60,6 +60,7 @@ class SwiftUIWrapperCellConfigurationView<Content: View>: UIView & UIContentView
         
         hostingVC.rootView = config.content
         hostingVC.view.backgroundColor = .clear
+        hostingVC.view.clipsToBounds = true
         hostingVC.view.invalidateIntrinsicContentSize()
         
         if requiringVCMove {
