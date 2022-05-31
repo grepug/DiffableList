@@ -11,11 +11,14 @@ import SwiftUI
 public struct SwiftUIWrapperCellConfiguration<Content: View>: UIContentConfiguration {
     var content: Content
     var parentVC: () -> UIViewController
+    var clipsToBounds: Bool
     
     public init(toParentVC parentVC: @autoclosure @escaping () -> UIViewController,
-         @ViewBuilder content: @escaping () -> Content) {
+                clipsToBounds: Bool = true
+                @ViewBuilder content: @escaping () -> Content) {
         self.parentVC = parentVC
         self.content = content()
+        self.clipsToBounds = clipsToBounds
     }
     
     public func makeContentView() -> UIView & UIContentView {
@@ -60,7 +63,7 @@ class SwiftUIWrapperCellConfigurationView<Content: View>: UIView & UIContentView
         
         hostingVC.rootView = config.content
         hostingVC.view.backgroundColor = .clear
-        hostingVC.view.clipsToBounds = true
+        hostingVC.view.clipsToBounds = config.clipsToBounds
         hostingVC.view.invalidateIntrinsicContentSize()
         
         if requiringVCMove {
