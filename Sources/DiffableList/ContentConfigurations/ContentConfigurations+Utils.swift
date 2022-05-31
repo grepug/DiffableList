@@ -18,8 +18,12 @@ public struct DLContentConfiguration {
 }
 
 public extension DLContentConfiguration {
-    static func swiftUI<Content: View>(movingTo parent: @autoclosure @escaping () -> UIViewController, @ViewBuilder content: @escaping () -> Content ) -> Self {
-        .init(contentConfiguration: SwiftUIWrapperCellConfiguration(toParentVC: parent(), content: content))
+    static func swiftUI<Content: View>(movingTo parent: @autoclosure @escaping () -> UIViewController,
+                                       clipsToBounds: Bool = true,
+                                       @ViewBuilder content: @escaping () -> Content) -> Self {
+        .init(contentConfiguration: SwiftUIWrapperCellConfiguration(toParentVC: parent(),
+                                                                    clipsToBounds: clipsToBounds,
+                                                                    content: content))
     }
     
     static func header(_ title: String, using config: UIListContentConfiguration = .compactibleProminentInsetGroupedHeader()) -> Self {
