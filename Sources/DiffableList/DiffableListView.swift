@@ -181,7 +181,17 @@ extension DiffableListView {
             
             if isFirstAppling || isSnapshotChanged {
                 currentApplyingSection = section
-                diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating)
+                
+                logger.log("""
+                    before applying changes with section: \(section),
+                    isFirstApplying: \(isFirstAppling.description),
+                    isSnapshotChanged: \(isSnapshotChanged.description)
+                    at: \(String(describing: self.parentViewController))
+                    """)
+                
+                diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating) {
+                    logger.log("after applying changes with section: \(section)")
+                }
             }
         }
     }
@@ -270,17 +280,49 @@ extension DiffableListView {
     
     func makeCellConfig() -> UICollectionView.CellRegistration<UICollectionViewListCell, ItemIdentifier> {
         .init { [unowned self] cell, indexPath, itemIdentifier in
-            guard let cellConvertible = self.cellConvertible(at: indexPath) else {
-                fatalError()
+            guard let cellConvertible = cellConvertible(at: indexPath) else {
+                logger.fault("""
+                    cellConvertible indexPath not valid
+                    at: \(String(describing: self.parentViewController))
+                """)
+                
+                if #available(iOS 15, *) {
+                    collectLogsBeforeTermination()
+                    
+                    return
+                } else {
+                    fatalError()
+                }
             }
             
             guard cellConvertible.id == itemIdentifier else {
-                print("@@ cellConvertible inconsistant", indexPath)
+                let sections: [[String]] = content.sections.map { section in
+                    section.cells.map { cell in
+                        """
+                        id: \(cell.id)
+                        name: \(cell.name ?? "<No Name>")
+                        parentId: \(cell.parentId ?? "<No Parent>")
+                        itemTitle: \(cell.itemTitle ?? "<No Item Title>")
+                        """
+                    }
+                }
                 
-                print(cellConvertible)
-                print(cellConvertible.name ?? "")
-                
-                fatalError()
+                logger.fault("""
+                    cellConvertible inconsistant
+                    at: \(String(describing: self.parentViewController))
+                    name: \(cellConvertible.name ?? "<No Name>")
+                    id: \(cellConvertible.id)
+                    sectionCount: \(self.content.sections.count)
+                    details: \(sections.description)
+                """)
+
+                if #available(iOS 15, *) {
+                    collectLogsBeforeTermination()
+                    
+                    return
+                } else {
+                    fatalError()
+                }
             }
             
             let content = currentContent(at: indexPath)
