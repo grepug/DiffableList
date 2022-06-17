@@ -418,7 +418,8 @@ extension DiffableListView {
                 return !disabled
             }
             
-            if cell.storedDidSelectedAction != nil {
+            if cell.storedDidSelectedAction != nil ||
+                cell.storedDidSelectedAndDeselectAction != nil {
                 return true
             }
             
