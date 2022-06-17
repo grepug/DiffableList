@@ -386,7 +386,15 @@ extension DiffableListView {
         }
         
         if let cell = cellConvertible as? DLCell {
-            cell.storedDidSelectedAction?(indexPath)
+            if let action = cell.storedDidSelectedAndDeselectAction {
+                action(indexPath)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    collectionView.deselectItem(at: indexPath, animated: true)
+                }
+            } else if let action = cell.storedDidSelectedAction {
+                action(indexPath)
+            }
         }
         
         content.storedOnTapAction?(indexPath)

@@ -51,6 +51,7 @@ public struct DLCell: CellConvertible {
     var storedContextMenu: UIContextMenuConfiguration?
     var storedAccessories: [UICellAccessory?] = []
     var storedDidSelectedAction: ((IndexPath) -> Void)?
+    var storedDidSelectedAndDeselectAction: ((IndexPath) -> Void)?
     var storedLeadingSwipeActions: [UIContextualAction]?
     var storedTrailingSwipeActions: [UIContextualAction]?
     var storedDidEndDisplay: ((UICollectionViewCell, IndexPath) -> Void)?
@@ -119,6 +120,13 @@ public struct DLCell: CellConvertible {
     public func onTap(perform action: @escaping (IndexPath) -> Void) -> Self {
         var me = self
         me.storedDidSelectedAction = action
+        
+        return me
+    }
+    
+    public func onTapAndDeselect(perform action: @escaping (IndexPath) -> Void) -> Self {
+        var me = self
+        me.storedDidSelectedAndDeselectAction = action
         
         return me
     }
