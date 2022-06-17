@@ -427,12 +427,6 @@ class SectionProviderWrapper {
     }
 }
 
-extension NSCollectionLayoutSection {
-    static var empty: NSCollectionLayoutSection {
-        NSCollectionLayoutSection(group: .horizontal(layoutSize: .init(widthDimension: .absolute(0.01), heightDimension: .absolute(0.01)), subitem: .init(layoutSize: .init(widthDimension: .absolute(0.01), heightDimension: .absolute(0.01))), count: 1))
-    }
-}
-
 extension Array {
     func at(_ index: Int) -> Element? {
         if count > index && index >= 0 {
