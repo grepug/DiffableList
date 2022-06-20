@@ -21,6 +21,14 @@ public struct SwiftUIWrapperCellConfiguration<Content: View>: UIContentConfigura
         self.clipsToBounds = clipsToBounds
     }
     
+    public init(toParentVC parentVC: @escaping () -> UIViewController,
+                clipsToBounds: Bool = true,
+                @ViewBuilder content: @escaping () -> Content) {
+        self.parentVC = parentVC
+        self.content = content()
+        self.clipsToBounds = clipsToBounds
+    }
+    
     public func makeContentView() -> UIView & UIContentView {
         SwiftUIWrapperCellConfigurationView(configuration: self)
     }

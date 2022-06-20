@@ -26,6 +26,14 @@ public extension DLContentConfiguration {
                                                                     content: content))
     }
     
+    static func swiftUI<Content: View>(movingTo parent: @escaping () -> UIViewController,
+                                       clipsToBounds: Bool = true,
+                                       @ViewBuilder content: @escaping () -> Content) -> Self {
+        .init(contentConfiguration: SwiftUIWrapperCellConfiguration(toParentVC: parent,
+                                                                    clipsToBounds: clipsToBounds,
+                                                                    content: content))
+    }
+    
     static func header(_ title: String, using config: UIListContentConfiguration = .compactibleProminentInsetGroupedHeader()) -> Self {
         var config = config
         config.text = title
