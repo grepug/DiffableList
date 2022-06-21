@@ -6,11 +6,6 @@
 //
 
 import UIKit
-import os
-
-fileprivate extension Logger {
-    static let vc = Logger(subsystem: "diffable.list", category: "diffable.list.DiffableListViewController")
-}
 
 open class DiffableListViewController: UIViewController {
     lazy public var listView = makeListView()
@@ -19,18 +14,18 @@ open class DiffableListViewController: UIViewController {
         if let cacheKey = cachedCollapsedItemIdentifiersKey,
             let cachedIdentifiers = UserDefaults.standard.stringArray(forKey: cacheKey) {
             
-            Logger.vc.info("cachedIdentifiers, \(cachedIdentifiers)")
+            logger.info("cachedIdentifiers, \(cachedIdentifiers)")
             
             return Set(cachedIdentifiers)
         }
         
-        Logger.vc.info("initial cachedIdentifers, []")
+        logger.info("initial cachedIdentifers, []")
         
         if let collapseAllByDefaultAndExcludedIds = collapseAllByDefaultAndExcludedIds {
             var ids = allParentIdentifiers
             ids = ids.subtracting(collapseAllByDefaultAndExcludedIds)
             
-            Logger.vc.info("initial parentIds cachedIdentifers, \(ids)")
+            logger.info("initial parentIds cachedIdentifers, \(ids)")
             
             return ids
         }
@@ -39,7 +34,7 @@ open class DiffableListViewController: UIViewController {
     }() {
         didSet {
             if let cacheKey = cachedCollapsedItemIdentifiersKey {
-                Logger.vc.info("did set cachedIdentifiers, \(self.collapsedItemIdentifiers)")
+                logger.info("did set cachedIdentifiers, \(self.collapsedItemIdentifiers)")
                 
                 UserDefaults.standard.set(Array(collapsedItemIdentifiers), forKey: cacheKey)
             }
@@ -62,7 +57,7 @@ open class DiffableListViewController: UIViewController {
             listView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
-        Logger.vc.info("did make list view")
+        logger.info("did make list view")
         
         return listView
     }
@@ -76,10 +71,14 @@ open class DiffableListViewController: UIViewController {
     }
     
     open func reload(applyingSnapshot: Bool = true, animating: Bool = true) {
+        logger.log("list is trying to reload at \(String(describing: self))")
+        
         guard canReload else {
-            Logger.vc.log("reload denied!")
+            logger.log("list reload denied!")
             return
         }
+        
+        logger.log("list before reloading")
         
         let cachedCollapsedItemIdentifiers = collapsedItemIdentifiers
         
@@ -93,11 +92,13 @@ open class DiffableListViewController: UIViewController {
                             collapsedItemIdentifiers: cachedCollapsedItemIdentifiers,
                             animating: animating,
                             makingSnapshotsCompletion: { [unowned self] in
-            self.collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
+            collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
             
             /// apply snapshot 之后，重新生成 list，过滤掉折叠的 cell，以便在 dequeue cell 的时候，根据 indexPath 获取的是正确的 cell
-            self.listView.setContent(self.filteredList, applyingSnapshot: false)
+            listView.setContent(filteredList, applyingSnapshot: false)
         })
+        
+        logger.log("list after reloading at \(String(describing: self))")
     }
     
     public func becomeFirstResponder(at indexPath: IndexPath) {
