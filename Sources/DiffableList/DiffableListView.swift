@@ -196,14 +196,14 @@ extension DiffableListView {
                 currentApplyingSection = section
                 
                 logger.log("""
-                    before applying changes with section: \(section),
-                    isFirstApplying: \(isFirstAppling.description),
-                    isSnapshotChanged: \(isSnapshotChanged.description)
-                    at: \(String(describing: self.parentViewController))
+                    before applying changes with section: \(section, privacy: .public),
+                    isFirstApplying: \(isFirstAppling.description, privacy: .public),
+                    isSnapshotChanged: \(isSnapshotChanged.description, privacy: .public)
+                    at: \(String(describing: self.parentViewController), privacy: .public)
                     """)
                 
                 diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating) {
-                    logger.log("after applying changes with section: \(section)")
+                    logger.log("after applying changes with section: \(section, privacy: .public)")
                 }
             }
         }
@@ -293,7 +293,7 @@ extension DiffableListView {
             guard let cellConvertible = cellConvertible(at: indexPath) else {
                 logger.fault("""
                     cellConvertible indexPath not valid
-                    at: \(String(describing: self.parentViewController))
+                    at: \(String(describing: self.parentViewController), privacy: .public)
                 """)
                 
                 if #available(iOS 15, *) {
@@ -319,11 +319,11 @@ extension DiffableListView {
                 
                 logger.fault("""
                     cellConvertible inconsistant
-                    at: \(String(describing: self.parentViewController))
-                    name: \(cellConvertible.name ?? "<No Name>")
-                    id: \(cellConvertible.id)
-                    sectionCount: \(self.content.sections.count)
-                    details: \(sections.description)
+                    at: \(String(describing: self.parentViewController), privacy: .public)
+                    name: \(cellConvertible.name ?? "<No Name>", privacy: .public)
+                    id: \(cellConvertible.id, privacy: .public)
+                    sectionCount: \(self.content.sections.count, privacy: .public)
+                    details: \(sections.description, privacy: .public)
                 """)
 
                 if #available(iOS 15, *) {

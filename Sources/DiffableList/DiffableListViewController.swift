@@ -14,7 +14,7 @@ open class DiffableListViewController: UIViewController {
         if let cacheKey = cachedCollapsedItemIdentifiersKey,
             let cachedIdentifiers = UserDefaults.standard.stringArray(forKey: cacheKey) {
             
-            logger.info("cachedIdentifiers, \(cachedIdentifiers)")
+            logger.info("cachedIdentifiers, \(cachedIdentifiers, privacy: .public)")
             
             return Set(cachedIdentifiers)
         }
@@ -25,7 +25,7 @@ open class DiffableListViewController: UIViewController {
             var ids = allParentIdentifiers
             ids = ids.subtracting(collapseAllByDefaultAndExcludedIds)
             
-            logger.info("initial parentIds cachedIdentifers, \(ids)")
+            logger.info("initial parentIds cachedIdentifers, \(ids, privacy: .public)")
             
             return ids
         }
@@ -34,7 +34,7 @@ open class DiffableListViewController: UIViewController {
     }() {
         didSet {
             if let cacheKey = cachedCollapsedItemIdentifiersKey {
-                logger.info("did set cachedIdentifiers, \(self.collapsedItemIdentifiers)")
+                logger.info("did set cachedIdentifiers, \(self.collapsedItemIdentifiers, privacy: .public)")
                 
                 UserDefaults.standard.set(Array(collapsedItemIdentifiers), forKey: cacheKey)
             }
@@ -71,7 +71,7 @@ open class DiffableListViewController: UIViewController {
     }
     
     open func reload(applyingSnapshot: Bool = true, animating: Bool = true) {
-        logger.log("list is trying to reload at \(String(describing: self))")
+        logger.log("list is trying to reload at \(String(describing: self), privacy: .public)")
         
         guard canReload else {
             logger.log("list reload denied!")
@@ -98,7 +98,7 @@ open class DiffableListViewController: UIViewController {
             listView.setContent(filteredList, applyingSnapshot: false)
         })
         
-        logger.log("list after reloading at \(String(describing: self))")
+        logger.log("list after reloading at \(String(describing: self), privacy: .public)")
     }
     
     public func becomeFirstResponder(at indexPath: IndexPath) {
