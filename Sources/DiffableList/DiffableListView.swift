@@ -38,20 +38,20 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     
     func setupLayout() {
         sectionProviderWrapper.sectionProvider = { [unowned self] sectionIndex, env in
+            let section = content.sections[sectionIndex]
+            
+            guard !section.cells.isEmpty else {
+                return .empty
+            }
+            
             if let customSectionProvider = customSectionProvider {
                 if let section = customSectionProvider(sectionIndex, env) {
                     return section
                 }
             }
             
-            let section = content.sections[sectionIndex]
-            
             if let section = section.storedLayout?(env) {
                 return section
-            }
-            
-            guard !section.cells.isEmpty else {
-                return .empty
             }
             
             var listConfig = UICollectionLayoutListConfiguration(appearance: content.storedAppearance)
