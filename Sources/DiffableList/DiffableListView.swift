@@ -13,8 +13,8 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
     var prevContent: DLList = DLList {}
     var currentApplyingSection: SectionIdentifier?
     
-    private unowned var sectionProviderWrapper: SectionProviderWrapper
-    private var appliedSnapshotSectionIds = Set<SectionIdentifier>()
+    unowned var sectionProviderWrapper: SectionProviderWrapper
+    var appliedSnapshotSectionIds = Set<SectionIdentifier>()
     public var customSectionProvider: UICollectionViewCompositionalLayoutSectionProvider?
     
     public init(frame: CGRect) {
@@ -149,86 +149,6 @@ extension DiffableListView {
         setupReorderHandler()
     }
     
-    func applySnapshot(animating: Bool, collapsedItemIdentifiers: Set<ItemIdentifier>, makingSnapshotsCompletion: (() -> Void)? = nil) {
-        var currentAppliedSectionIds = Set<SectionIdentifier>()
-        let prevAppliedSectionIds = appliedSnapshotSectionIds
-        var snapshots: [(SectionIdentifier, NSDiffableDataSourceSectionSnapshot<ItemIdentifier>)] = []
-        
-        for section in content.sections {
-            var snapshot = diffableDataSource.snapshot(for: section.id)
-            snapshot.deleteAll()
-            
-            for cell in section.cells {
-                snapshot.append([cell.id], to: cell.parentId)
-                
-                if let parentId = cell.parentId {
-                    if collapsedItemIdentifiers.contains(parentId) {
-                        snapshot.collapse([parentId])
-                    } else {
-                        snapshot.expand([parentId])
-                    }
-                }
-            }
-            
-            currentAppliedSectionIds.insert(section.id)
-            snapshots.append((section.id, snapshot))
-        }
-        
-        appliedSnapshotSectionIds = currentAppliedSectionIds
-        
-        let notAppliedSectionIds = prevAppliedSectionIds.subtracting(currentAppliedSectionIds)
-        var snapshot = diffableDataSource.snapshot()
-        
-        snapshot.deleteSections(Array(notAppliedSectionIds))
-        
-        makingSnapshotsCompletion?()
-        
-        if !notAppliedSectionIds.isEmpty {
-            diffableDataSource.apply(snapshot, animatingDifferences: animating)
-        }
-        
-        for (section, snapshot) in snapshots {
-            let isFirstAppling = !prevAppliedSectionIds.contains(section)
-            let prevSnapshot = diffableDataSource.snapshot(for: section)
-            let isSnapshotChanged = snapshotsAreChanged(prev: prevSnapshot, current: snapshot)
-            
-            if isFirstAppling || isSnapshotChanged {
-                currentApplyingSection = section
-                
-                logger.log("""
-                    before applying changes with section: \(section, privacy: .public),
-                    isFirstApplying: \(isFirstAppling.description, privacy: .public),
-                    isSnapshotChanged: \(isSnapshotChanged.description, privacy: .public)
-                    at: \(String(describing: self.parentViewController), privacy: .public)
-                    """)
-                
-                diffableDataSource.apply(snapshot, to: section, animatingDifferences: animating) {
-                    logger.log("after applying changes with section: \(section, privacy: .public)")
-                }
-            }
-        }
-    }
-    
-    typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<ItemIdentifier>
-    
-    func snapshotsAreChanged(prev snapshotA: SectionSnapshot, current snapshotB: SectionSnapshot) -> Bool {
-        if snapshotA.items != snapshotB.items {
-            return true
-        }
-        
-        for item in snapshotA.items {
-            if !snapshotB.items.contains(item) {
-                return true
-            }
-            
-            if snapshotA.isExpanded(item) != snapshotB.isExpanded(item) {
-                return true
-            }
-        }
-        
-        return false
-    }
-    
     func makeDataSource() -> UICollectionViewDiffableDataSource<SectionIdentifier, ItemIdentifier> {
         let cellConfig = makeCellConfig()
         
@@ -296,13 +216,15 @@ extension DiffableListView {
                     at: \(String(describing: self.parentViewController), privacy: .public)
                 """)
                 
-                if #available(iOS 15, *) {
-                    collectLogsBeforeTermination()
-                    
-                    return
-                } else {
-                    fatalError()
-                }
+                fatalError()
+                
+//                if #available(iOS 15, *) {
+//                    collectLogsBeforeTermination()
+//
+//                    return
+//                } else {
+//                    fatalError()
+//                }
             }
             
             guard cellConvertible.id == itemIdentifier else {
@@ -326,13 +248,14 @@ extension DiffableListView {
                     details: \(sections.description, privacy: .public)
                 """)
 
-                if #available(iOS 15, *) {
-                    collectLogsBeforeTermination()
-                    
-                    return
-                } else {
-                    fatalError()
-                }
+                fatalError()
+//                if #available(iOS 15, *) {
+//                    collectLogsBeforeTermination()
+//
+//                    return
+//                } else {
+//                    fatalError()
+//                }
             }
             
             let content = currentContent(at: indexPath)
