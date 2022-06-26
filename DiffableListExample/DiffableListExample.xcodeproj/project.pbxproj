@@ -18,6 +18,7 @@
 		2ABAD2D027E0685900C9C47E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2ABAD2CE27E0685900C9C47E /* LaunchScreen.storyboard */; };
 		2ABAD2DB27E0695D00C9C47E /* DiffableList in Frameworks */ = {isa = PBXBuildFile; productRef = 2ABAD2DA27E0695D00C9C47E /* DiffableList */; };
 		2ABAD2DD27E07BBC00C9C47E /* SwiftUIWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABAD2DC27E07BBC00C9C47E /* SwiftUIWrapper.swift */; };
+		2ABD6B78286597F300036103 /* ConditionalSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABD6B77286597F300036103 /* ConditionalSectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		2ABAD2D127E0685900C9C47E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2ABAD2D827E0687300C9C47E /* DiffableList */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DiffableList; path = ..; sourceTree = "<group>"; };
 		2ABAD2DC27E07BBC00C9C47E /* SwiftUIWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIWrapper.swift; sourceTree = "<group>"; };
+		2ABD6B77286597F300036103 /* ConditionalSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalSectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,9 +53,10 @@
 		2A4EA9B4283E36350000E957 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				2ABD6B77286597F300036103 /* ConditionalSectionViewController.swift */,
+				2ABAD2C727E0685700C9C47E /* ListViewController.swift */,
 				2A4EA9B5283E36560000E957 /* OrthogonalScrollingViewController.swift */,
 				2A93182A283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift */,
-				2ABAD2C727E0685700C9C47E /* ListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2ABAD2C827E0685700C9C47E /* ListViewController.swift in Sources */,
+				2ABD6B78286597F300036103 /* ConditionalSectionViewController.swift in Sources */,
 				2ABAD2C427E0685700C9C47E /* AppDelegate.swift in Sources */,
 				2A93182B283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift in Sources */,
 				2A4EA9B8283E36600000E957 /* EntryViewController.swift in Sources */,
@@ -343,6 +347,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -370,6 +375,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

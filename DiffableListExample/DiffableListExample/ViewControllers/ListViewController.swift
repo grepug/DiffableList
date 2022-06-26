@@ -21,7 +21,7 @@ class ListViewController: DiffableListViewController {
         .init(value: "1", color: .red, height: 55),
         .init(value: "2", color: .green, height: 69),
         .init(value: "3", color: .blue, height: 12),
-        .init(value: "4", color: .brown, height: 59),
+        .init(value: "4", color: .purple, height: 59),
     ]
     
     override func viewDidLoad() {
