@@ -216,15 +216,13 @@ extension DiffableListView {
                     at: \(String(describing: self.parentViewController), privacy: .public)
                 """)
                 
-                fatalError()
-                
-//                if #available(iOS 15, *) {
-//                    collectLogsBeforeTermination()
-//
-//                    return
-//                } else {
-//                    fatalError()
-//                }
+                if #available(iOS 15, *) {
+                    collectLogsBeforeTermination()
+
+                    return
+                } else {
+                    fatalError()
+                }
             }
             
             guard cellConvertible.id == itemIdentifier else {
@@ -248,14 +246,13 @@ extension DiffableListView {
                     details: \(sections.description, privacy: .public)
                 """)
 
-                fatalError()
-//                if #available(iOS 15, *) {
-//                    collectLogsBeforeTermination()
-//
-//                    return
-//                } else {
-//                    fatalError()
-//                }
+                if #available(iOS 15, *) {
+                    collectLogsBeforeTermination()
+
+                    return
+                } else {
+                    fatalError()
+                }
             }
             
             let content = currentContent(at: indexPath)
