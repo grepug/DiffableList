@@ -53,8 +53,11 @@ extension DiffableListView {
             sectionIdsToDelete.formUnion(currentAppliedSectionIds)
         }
         
-        if !sectionIdsToDelete.isEmpty {
-            snapshot.deleteSections(Array(sectionIdsToDelete))
+        let deletingAllItems = !sectionIdsToDelete.isEmpty
+        
+        if deletingAllItems {
+            /// 简单粗暴，一旦有 section 的变化，直接删除所有 items
+            snapshot.deleteAllItems()
         }
         
         makingSnapshotsCompletion?()
@@ -66,7 +69,7 @@ extension DiffableListView {
         for (section, snapshot) in snapshots {
             let isFirstAppling = !prevAppliedSectionIds.contains(section)
             let prevSnapshot = diffableDataSource.snapshot(for: section)
-            let isSnapshotChanged = snapshotsAreChanged(prev: prevSnapshot, current: snapshot)
+            let isSnapshotChanged = deletingAllItems || snapshotsAreChanged(prev: prevSnapshot, current: snapshot)
             
             if isFirstAppling || isSnapshotChanged {
                 currentApplyingSection = section
