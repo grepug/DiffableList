@@ -105,6 +105,11 @@ public class DiffableListView: UICollectionView, UICollectionViewDelegate {
                 return nil
             }
             
+            if let mutatingListConfig = section.storedMutatingListConfig,
+               let mutatedListConfig = mutatingListConfig(listConfig) {
+                listConfig = mutatedListConfig
+            }
+            
             let layoutSection = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: env)
             
             return layoutSection

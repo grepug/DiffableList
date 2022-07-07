@@ -29,6 +29,7 @@ public struct DLSection: SectionConvertible, Identifiable {
     var storedHeaderTopPadding: CGFloat?
     var storedLayout: ((NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?)?
     var storedListBackgroundColor: UIColor?
+    var storedMutatingListConfig: ((UICollectionLayoutListConfiguration) -> UICollectionLayoutListConfiguration?)?
     
     public init(@ListBuilder cells: @escaping () -> [CellConvertible]) {
         self.cells = cells()
@@ -60,17 +61,17 @@ public struct DLSection: SectionConvertible, Identifiable {
         var me = self
         me.headerContentConfiguration = contentConfiguration
         return me
-    }
+   }
     
     public func footer(using contentConfiguration: DLContentConfiguration?) -> Self {
-         var me = self
+        var me = self
         
         if let contentConfiguration = contentConfiguration {
             me.footerContentConfiguration = contentConfiguration
         }
         
-         return me
-     }
+        return me
+    }
     
     public func footer(_ text: String) -> Self {
         var me = self
@@ -93,6 +94,12 @@ public struct DLSection: SectionConvertible, Identifiable {
     public func listBackgroundColor(_ color: UIColor) -> Self {
         var me = self
         me.storedListBackgroundColor = color
+        return me
+    }
+    
+    public func listConfig(mutatingListConfig: ((UICollectionLayoutListConfiguration) -> UICollectionLayoutListConfiguration?)?) -> Self {
+        var me = self
+        me.storedMutatingListConfig = mutatingListConfig
         return me
     }
 }
