@@ -62,9 +62,13 @@ public struct DLSection: SectionConvertible, Identifiable {
         return me
     }
     
-    public func footer(using contentConfiguration: DLContentConfiguration) -> Self {
+    public func footer(using contentConfiguration: DLContentConfiguration?) -> Self {
          var me = self
-         me.footerContentConfiguration = contentConfiguration
+        
+        if let contentConfiguration = contentConfiguration {
+            me.footerContentConfiguration = contentConfiguration
+        }
+        
          return me
      }
     
