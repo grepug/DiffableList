@@ -49,7 +49,11 @@ class ReusableContentView: UICollectionReusableView {
 }
 
 public extension DiffableListView {
-    static var reusableContentViewKind: String {
-        "ReusableContentViewKind"
+    static var reusableContentViewHeaderKind: String {
+        "ReusableContentViewHeaderKind"
+    }
+    
+    static var reusableContentViewFooterKind: String {
+        "ReusableContentViewFooterKind"
     }
 }

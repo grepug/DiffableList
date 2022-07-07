@@ -22,4 +22,12 @@ public extension NSCollectionLayoutSection {
         
         return section
     }
+    
+    static func listWithSupplymentaryFooter(env: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        var listConfig = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        listConfig.footerMode = .supplementary
+        let section = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: env)
+        
+        return section
+    }
 }

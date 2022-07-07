@@ -160,16 +160,24 @@ extension DiffableListView {
     func setupSupplementaryViewProvider() {
         let headerLabelConfig = makeHeaderLabelSupplementaryViewConfig()
         let footerLabelConfig = makeFooterLabelSupplementaryViewConfig()
-        let headerConfig = makeHeaderLabelSupplementaryViewConfig2()
+        let headerContentViewConfig = makeHeaderLabelSupplementaryContentViewConfig()
+        let footerContentViewConfig = makeFooterLabelSupplementaryContentViewConfig(kind: UICollectionView.elementKindSectionFooter)
+        let footerContentViewConfig2 = makeFooterLabelSupplementaryContentViewConfig(kind: DiffableListView.reusableContentViewFooterKind)
         
-        diffableDataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
+        diffableDataSource.supplementaryViewProvider = { [unowned self] collectionView, elementKind, indexPath in
             switch elementKind {
             case UICollectionView.elementKindSectionHeader:
                 return collectionView.dequeueConfiguredReusableSupplementary(using: headerLabelConfig, for: indexPath)
             case UICollectionView.elementKindSectionFooter:
-                return collectionView.dequeueConfiguredReusableSupplementary(using: footerLabelConfig, for: indexPath)
-            case DiffableListView.reusableContentViewKind:
-                return collectionView.dequeueConfiguredReusableSupplementary(using: headerConfig, for: indexPath)
+                if content.sections[indexPath.section].footerContentConfiguration == nil {
+                    return collectionView.dequeueConfiguredReusableSupplementary(using: footerLabelConfig, for: indexPath)
+                }
+                
+                return collectionView.dequeueConfiguredReusableSupplementary(using: footerContentViewConfig, for: indexPath)
+            case DiffableListView.reusableContentViewHeaderKind:
+                return collectionView.dequeueConfiguredReusableSupplementary(using: headerContentViewConfig, for: indexPath)
+            case DiffableListView.reusableContentViewFooterKind:
+                return collectionView.dequeueConfiguredReusableSupplementary(using: footerContentViewConfig2, for: indexPath)
             default: break
             }
             
@@ -285,16 +293,24 @@ extension DiffableListView {
         }
     }
     
-    func makeHeaderLabelSupplementaryViewConfig2() -> UICollectionView.SupplementaryRegistration<ReusableContentView> {
-        .init(elementKind: DiffableListView.reusableContentViewKind) { [unowned self] supplementaryView, elementKind, indexPath in
+    func makeHeaderLabelSupplementaryContentViewConfig() -> UICollectionView.SupplementaryRegistration<ReusableContentView> {
+        .init(elementKind: DiffableListView.reusableContentViewHeaderKind) { [unowned self] supplementaryView, elementKind, indexPath in
             let section = section(at: indexPath)
             
             supplementaryView.contentConfiguration = section.headerContentConfiguration?.contentConfiguration
         }
     }
     
+    func makeFooterLabelSupplementaryContentViewConfig(kind: String) -> UICollectionView.SupplementaryRegistration<ReusableContentView> {
+        .init(elementKind: kind) { [unowned self] supplementaryView, elementKind, indexPath in
+            let section = section(at: indexPath)
+            
+            supplementaryView.contentConfiguration = section.footerContentConfiguration?.contentConfiguration
+        }
+    }
+    
     func makeFooterLabelSupplementaryViewConfig() -> UICollectionView.SupplementaryRegistration<LabelResuableView> {
-        .init(elementKind: UICollectionView.elementKindSectionFooter) { [unowned self] supplementaryView, elementKind, indexPath in
+        .init(elementKind: DiffableListView.reusableContentViewFooterKind) { [unowned self] supplementaryView, elementKind, indexPath in
             let section = self.section(at: indexPath)
             
             supplementaryView.config(text: section.footerText!)

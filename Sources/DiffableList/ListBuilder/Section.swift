@@ -24,6 +24,7 @@ public struct DLSection: SectionConvertible, Identifiable {
     var isFirstCellAsHeader: Bool = false
     var headerText: String?
     var headerContentConfiguration: DLContentConfiguration?
+    var footerContentConfiguration: DLContentConfiguration?
     var footerText: String?
     var storedHeaderTopPadding: CGFloat?
     var storedLayout: ((NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?)?
@@ -55,11 +56,17 @@ public struct DLSection: SectionConvertible, Identifiable {
         return me
     }
     
-    public func header(using contentConfiguration: DLContentConfiguration) -> Self {
+   public func header(using contentConfiguration: DLContentConfiguration) -> Self {
         var me = self
         me.headerContentConfiguration = contentConfiguration
         return me
     }
+    
+    public func footer(using contentConfiguration: DLContentConfiguration) -> Self {
+         var me = self
+         me.footerContentConfiguration = contentConfiguration
+         return me
+     }
     
     public func footer(_ text: String) -> Self {
         var me = self
