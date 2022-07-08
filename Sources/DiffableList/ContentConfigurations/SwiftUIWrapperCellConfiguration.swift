@@ -68,6 +68,7 @@ class SwiftUIWrapperCellConfigurationView<Content: View>: UIView & UIContentView
         let config = configuration as! Configuration<Content>
         let parentVC = config.parentVC()
         let requiringVCMove = hostingVC.parent != parentVC
+        let isToolbarHiddenOfParentVC = parentVC.navigationController?.isToolbarHidden
         
         hostingVC.rootView = config.content
         hostingVC.view.backgroundColor = .clear
@@ -92,6 +93,12 @@ class SwiftUIWrapperCellConfigurationView<Content: View>: UIView & UIContentView
         
         if requiringVCMove {
             hostingVC.didMove(toParent: parentVC)
+        }
+        
+        if isToolbarHiddenOfParentVC == false {
+            DispatchQueue.main.async {
+                parentVC.navigationController?.isToolbarHidden = false
+            }
         }
     }
 }
