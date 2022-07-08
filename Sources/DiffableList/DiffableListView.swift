@@ -315,7 +315,7 @@ extension DiffableListView {
     }
     
     func makeFooterLabelSupplementaryViewConfig() -> UICollectionView.SupplementaryRegistration<LabelResuableView> {
-        .init(elementKind: DiffableListView.reusableContentViewFooterKind) { [unowned self] supplementaryView, elementKind, indexPath in
+        .init(elementKind: UICollectionView.elementKindSectionFooter) { [unowned self] supplementaryView, elementKind, indexPath in
             let section = self.section(at: indexPath)
             
             supplementaryView.config(text: section.footerText!)
