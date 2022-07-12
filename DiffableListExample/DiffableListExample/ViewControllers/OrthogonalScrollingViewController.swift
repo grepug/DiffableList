@@ -110,6 +110,10 @@ class OrthogonalScrollingViewController: DiffableListViewController {
                 }
                 .padding(.leading)
             }))
+            .footer(using: .swiftUI(movingTo: self, content: {
+                Color.orange
+                    .frame(height: 50)
+            }))
             
             DLSection {
                 DLCell {
@@ -118,6 +122,10 @@ class OrthogonalScrollingViewController: DiffableListViewController {
                 .tag("haha")
             }
             .tag("3")
+            .footer(using: .swiftUI(movingTo: self, content: {
+                Color.green
+                    .frame(height: 50)
+            }))
         }
     }
     
@@ -169,10 +177,16 @@ extension OrthogonalScrollingViewController {
             
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                     heightDimension: .absolute(44))
+            let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                    heightDimension: .absolute(44))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize,
-                                                                     elementKind: DiffableListView.reusableContentViewKind,
+                                                                     elementKind: DiffableListView.reusableContentViewHeaderKind,
                                                                      alignment: .top)
-            section.boundarySupplementaryItems = [header]
+            let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize,
+                                                                     elementKind: DiffableListView.reusableContentViewFooterKind,
+                                                                     alignment: .bottom)
+            
+            section.boundarySupplementaryItems = [header, footer]
             
             return section
         default: return nil
