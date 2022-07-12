@@ -137,10 +137,8 @@ extension DiffableListView {
                     collapsedItemIdentifiers: Set<ItemIdentifier> = [],
                     animating: Bool = true,
                     makingSnapshotsCompletion completion: (() -> Void)? = nil) {
-        if #unavailable(iOS 15.0) {
-            if applyingSnapshot {
-                prevContent = content
-            }
+        if applyingSnapshot {
+            prevContent = content
         }
         
         content = list
@@ -340,11 +338,11 @@ extension DiffableListView {
     }
     
     func currentContent(at indexPath: IndexPath) -> DLList {
-        if #unavailable(iOS 15.0) {
-            if let section = currentApplyingSection,
-               indexForSection(section) < indexPath.section &&
-                !prevContent.sections.isEmpty {
-                return prevContent
+        if let section = currentApplyingSection {
+            if indexForSection(section) < indexPath.section {
+                if !prevContent.sections.isEmpty {
+                    return prevContent
+                }
             }
         }
         
