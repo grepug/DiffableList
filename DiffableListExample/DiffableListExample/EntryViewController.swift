@@ -13,6 +13,16 @@ class EntryViewController: DiffableListViewController {
         DLList {
             DLSection {
                 DLCell {
+                    DLText("GroupedListViewController")
+                }
+                .tag("GroupedListViewController")
+                .accessories([.disclosureIndicator()])
+                .onTapAndDeselect { [unowned self] _ in
+                    let vc = GroupedListViewController()
+                    navigationController?.pushViewController(vc, animated: true)
+                }
+                
+                DLCell {
                     DLText("OrthogonalScrollingViewController")
                 }
                 .tag("orthog")
@@ -42,7 +52,7 @@ class EntryViewController: DiffableListViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         reload(animating: false)
         
-        let vc = OrthogonalScrollingViewController()
+        let vc = GroupedListViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
 }

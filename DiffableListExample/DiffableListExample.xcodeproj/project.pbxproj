@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A1735E9287D66D90012D1C2 /* GroupedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1735E8287D66D90012D1C2 /* GroupedListViewController.swift */; };
 		2A4EA9B6283E36560000E957 /* OrthogonalScrollingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EA9B5283E36560000E957 /* OrthogonalScrollingViewController.swift */; };
 		2A4EA9B8283E36600000E957 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EA9B7283E36600000E957 /* EntryViewController.swift */; };
 		2A93182B283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A93182A283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2A1735E8287D66D90012D1C2 /* GroupedListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedListViewController.swift; sourceTree = "<group>"; };
 		2A4EA9B5283E36560000E957 /* OrthogonalScrollingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrthogonalScrollingViewController.swift; sourceTree = "<group>"; };
 		2A4EA9B7283E36600000E957 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewController.swift; sourceTree = "<group>"; };
 		2A93182A283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrthogonalScrollingViewController+Sheet.swift"; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 				2ABAD2C727E0685700C9C47E /* ListViewController.swift */,
 				2A4EA9B5283E36560000E957 /* OrthogonalScrollingViewController.swift */,
 				2A93182A283F31B40050BF5A /* OrthogonalScrollingViewController+Sheet.swift */,
+				2A1735E8287D66D90012D1C2 /* GroupedListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 				2A4EA9B8283E36600000E957 /* EntryViewController.swift in Sources */,
 				2ABAD2C627E0685700C9C47E /* SceneDelegate.swift in Sources */,
 				2A4EA9B6283E36560000E957 /* OrthogonalScrollingViewController.swift in Sources */,
+				2A1735E9287D66D90012D1C2 /* GroupedListViewController.swift in Sources */,
 				2ABAD2DD27E07BBC00C9C47E /* SwiftUIWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
