@@ -29,3 +29,7 @@ extension Hashable {
         itemIdentifier
     }
 }
+
+public enum DiffableListError: Error {
+    case itemsDuplicated
+}

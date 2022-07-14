@@ -87,19 +87,30 @@ open class DiffableListViewController: UIViewController {
             collapsedItemIdentifiers.removeAll()
         }
         
-        listView.setContent(filteredList,
-                            applyingSnapshot: applyingSnapshot,
-                            collapsedItemIdentifiers: cachedCollapsedItemIdentifiers,
-                            animating: animating,
-                            makingSnapshotsCompletion: { [unowned self] in
-            collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
+        do {
+            let list = try filteredList()
             
-            /// apply snapshot 之后，重新生成 list，过滤掉折叠的 cell，以便在 dequeue cell 的时候，根据 indexPath 获取的是正确的 cell
-            listView.setContent(filteredList, applyingSnapshot: false)
-        })
-        
-        logger.log("list after reloading at \(String(describing: self), privacy: .public)")
+            listView.setContent(list,
+                                applyingSnapshot: applyingSnapshot,
+                                collapsedItemIdentifiers: cachedCollapsedItemIdentifiers,
+                                animating: animating,
+                                makingSnapshotsCompletion: { [unowned self] in
+                collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
+                
+                /// apply snapshot 之后，重新生成 list，过滤掉折叠的 cell，以便在 dequeue cell 的时候，根据 indexPath 获取的是正确的 cell
+                if let list = try? filteredList() {
+                    listView.setContent(list, applyingSnapshot: false)
+                }
+            })
+            
+            logger.log("list after reloading at \(String(describing: self), privacy: .public)")
+        } catch {
+            collapsedItemIdentifiers = cachedCollapsedItemIdentifiers
+            handleError(error: error)
+        }
     }
+    
+    open func handleError(error: Error) {}
     
     public func becomeFirstResponder(at indexPath: IndexPath) {
         DispatchQueue.main.async {
@@ -190,11 +201,19 @@ private extension DiffableListViewController {
         return Set(ids)
     }
     
-    var filteredList: DLList {
-        let sections = list.sections.map { section -> DLSection in
+    func filteredList() throws -> DLList {
+        var itemIdentifiers: Set<ItemIdentifier> = []
+        
+        let sections = try list.sections.map { section throws -> DLSection in
             var collapsedParentIds = Set<ItemIdentifier>()
             
-            let cells = section.cells.compactMap { cell -> CellConvertible? in
+            let cells = try section.cells.compactMap { cell throws -> CellConvertible? in
+                let (inserted, _) = itemIdentifiers.insert(cell.id)
+                
+                if !inserted {
+                    throw DiffableListError.itemsDuplicated
+                }
+                
                 if let parentId = cell.parentId,
                    collapsedParentIds.contains(parentId) {
                     collapsedParentIds.insert(cell.id)
