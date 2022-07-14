@@ -12,7 +12,7 @@ class GroupedListViewController: DiffableListViewController {
         case a, b
     }
     
-    var items: [Section: [String]] = [.a: ["A"], .b: ["B", "C"]]
+    var items: [Section: [String]] = [.a: ["A"], .b: ["B", "A"]]
     
     override var list: DLList {
         DLList { [unowned self] in
@@ -53,5 +53,18 @@ class GroupedListViewController: DiffableListViewController {
             step += 1
             reload()
         })
+    }
+    
+    override func handleError(error: Error) {
+        guard let error = error as? DiffableListError else {
+            return
+        }
+        
+        switch error {
+        case .itemsDuplicated:
+            print("itemsDuplicated", true)
+            items = [.a: ["A"], .b: ["B", "C"]]
+            reload()
+        }
     }
 }
