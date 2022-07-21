@@ -11,7 +11,7 @@ import SwiftUI
 public extension DLContentConfiguration {
     static func toggle<Object: ObservableObject>(movingTo parentVC: @escaping @autoclosure () -> UIViewController, object: Object, isOn: ReferenceWritableKeyPath<Object, Bool>, text: LocalizedStringKey, handler: @escaping (Bool) -> Bool) -> DLContentConfiguration {
         return .swiftUI(movingTo: parentVC()) {
-            ToggleView(object: object, isOn: isOn, text: text, vc: parentVC, handler: handler)
+            ToggleView(object: object, isOn: isOn, text: text, handler: handler)
         }
     }
     
@@ -19,7 +19,6 @@ public extension DLContentConfiguration {
         @ObservedObject var object: Object
         var isOn: ReferenceWritableKeyPath<Object, Bool>
         var text: LocalizedStringKey = "action_enable"
-        var vc: () -> UIViewController
         var handler: (Bool) -> Bool
         
         var body: some View {
@@ -33,6 +32,41 @@ public extension DLContentConfiguration {
                 Text(text)
                 Spacer()
                 Toggle("", isOn: isOnBinding.intercepted(handler))
+            }
+            .padding(.horizontal)
+            .frame(height: 44)
+        }
+    }
+}
+
+public extension DLContentConfiguration {
+    static func toggle2(movingTo parentVC: @escaping @autoclosure () -> UIViewController, initialValue: Bool, text: LocalizedStringKey, handler: @escaping (Bool) -> Bool) -> DLContentConfiguration {
+        return .swiftUI(movingTo: parentVC()) {
+            ToggleView2(initialValue: initialValue, text: text, handler: handler)
+        }
+    }
+    
+    private struct ToggleView2: View {
+        var text: LocalizedStringKey = "action_enable"
+        var handler: (Bool) -> Bool
+        
+        @State private var isOn: Bool
+        
+        init(initialValue: Bool, text: LocalizedStringKey, handler: @escaping (Bool) -> Bool) {
+            _isOn = .init(initialValue: initialValue)
+            self.text = text
+            self.handler = handler
+        }
+        
+        var body: some View {
+            HStack {
+                Text(text)
+                Spacer()
+                Toggle("", isOn: Binding(get: {
+                    isOn
+                }, set: { isOn in
+                    self.isOn = handler(isOn)
+                }))
             }
             .padding(.horizontal)
             .frame(height: 44)
