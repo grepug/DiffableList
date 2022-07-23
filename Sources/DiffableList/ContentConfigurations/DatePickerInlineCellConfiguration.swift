@@ -87,6 +87,7 @@ private extension DatePickerInlineCellConfiguration.View {
     func apply(config: Config) {
         currentConfiguration = config
         datePicker.date = config.date
+        datePicker.datePickerMode = config.mode
         label.text = config.text
     }
 }
