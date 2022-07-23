@@ -74,10 +74,11 @@ public extension UICellAccessory {
                                                 placement: placement))
     }
     
-    static func toggle(isOn: Bool, placement: UICellAccessory.Placement = .trailing(displayed: .always), action: @escaping (Bool) -> Void) -> UICellAccessory {
+    static func toggle(isOn: Bool, isEnabled: Bool = true, placement: UICellAccessory.Placement = .trailing(displayed: .always), action: @escaping (Bool) -> Void) -> UICellAccessory {
         let toggleView = UISwitch()
         
         toggleView.isOn = isOn
+        toggleView.isEnabled = isEnabled
         
         toggleView.addAction(.init { _ in
             action(toggleView.isOn)
