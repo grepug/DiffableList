@@ -81,12 +81,23 @@ public struct DLCell: CellConvertible {
         self.configuration = dlConfiguration.contentConfiguration
     }
     
-    public func contextMenu(_ menu: [UIMenuElement]) -> Self {
+//    public func contextMenu(_ menu: [UIMenuElement]) -> Self {
+//        var cell = self
+//        cell.storedContextMenu = .init(identifier: id as NSCopying,
+//                                       previewProvider: nil,
+//                                       actionProvider: { _ in
+//                .init(children: menu)
+//        })
+//
+//        return cell
+//    }
+    
+    public func contextMenu(_ menu: @autoclosure @escaping () -> [UIMenuElement]) -> Self {
         var cell = self
         cell.storedContextMenu = .init(identifier: id as NSCopying,
                                        previewProvider: nil,
                                        actionProvider: { _ in
-                .init(children: menu)
+                .init(children: menu())
         })
         
         return cell
